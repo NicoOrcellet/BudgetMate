@@ -1,0 +1,113 @@
+﻿@using BudgetMate.ViewModels
+@model TotalTransactionsViewModel
+
+<style>
+    body{
+        background-color: #D9D9D9;
+    }
+
+    .infoCard{
+        background-color: white;
+    }
+
+    .weekIncomeExpense{
+        display:none;
+    }
+
+    .monthIncomeExpense {
+        display: block;
+    }
+
+</style>
+
+<div class="container px-4">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="infoCard">
+                <div class="d-flex justify-content-between">
+                    <p>Saldo Total:</p>
+                    <select class="infoCard" id="balanceSelection">
+                        <option value="month">Este mes</option>
+                        <option value="week">Esta semana</option>
+                    </select>
+                </div> 
+                <p>@(Model.totalIncome - @Model.totalExpense)</p>
+                <div id="monthBalance">
+                    <p>Saldo Mensual: </p>
+                    <p>@(Model.monthIncome - Model.monthExpense)</p>
+                </div>
+                <div id="weekBalance" style="display:none">
+                    <p>Saldo Semanal: </p>
+                    <p>@(Model.weekIncome - Model.weekExpense)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="infoCard" id="monthIncomeExpense">
+                <div class="d-flex justify-content-between">
+                    <p class="monthIncomeExpense">Ingreso Mensual:</p>
+                    <P class="weekIncomeExpense">Ingreso Semanal:</P>
+                    <select class="infoCard" id="incomeExpenseSelection">
+                        <option value="month">Este mes</option>
+                        <option value="week">Esta semana</option>
+                    </select>
+                </div>
+                <div class="monthIncomeExpense">
+                    <p>@Model.monthIncome</p>
+                    <p>Gasto Mensual:</p>
+                    <p>@Model.monthExpense</p>
+                </div>
+                <div class="weekIncomeExpense">
+                    <p>@Model.weekIncome</p>
+                    <p>Gasto Semanal:</p>
+                    <p>@Model.weekExpense</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div class="infoCard">
+                <p>Ahorro Mensual:</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <p>Últimas transacciones:</p>
+            <button>Agregar Transacción</button>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <table class="col-12 infoCard">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Categoría</th>
+                        <th>Monto</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.lastMoneyTransactions){
+                        <tr>
+                            <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
+                            @if (transaction.IsIncome){
+                                <td>Ingreso</td>
+                            } else {
+                                <td>Gasto</td>
+                            }
+                            <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
+                            <td>@Html.DisplayFor(m => transaction.Amount)</td>
+                            <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/home.js"></script>

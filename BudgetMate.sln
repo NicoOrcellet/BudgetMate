@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetMate", "BudgetMate\BudgetMate.csproj", "{28124246-8E87-42B4-909F-26A5F4B9703F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28124246-8E87-42B4-909F-26A5F4B9703F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28124246-8E87-42B4-909F-26A5F4B9703F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28124246-8E87-42B4-909F-26A5F4B9703F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28124246-8E87-42B4-909F-26A5F4B9703F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1312F549-A167-4682-A6ED-978459B4EA84}
+	EndGlobalSection
+EndGlobal
