@@ -1,15 +1,5 @@
-﻿@model List<MoneyTransaction>
-
-@{
-    var categories = new List<Category>();
-    foreach (var transiction in Model)
-    {
-        if (!categories.Contains(transiction.Category))
-        {
-            categories.Add(transiction.Category);
-        }
-    }
-}
+﻿@using BudgetMate.ViewModels
+@model FilterViewModel
 
 <style>
     body{
@@ -32,52 +22,96 @@
     <h1>Transacciones</h1>
     <div class="row">
         <div>
-            <div class="d-flex w-100 justify-content-between">
-                <p class="col-2">Buscar:</p>
-                <div class="col-10">
-                    <Select id="searchSelect" class="form-select">
-                        <option disabled selected value="none">Seleccionar filtro</option>
-                        <option value="amount">Monto</option>
-                        <option value="date">Fechas</option>
-                        <option value="category">Categoría</option>
-                    </Select>
-                </div>
-            </div>
-            <div class="d-flex">
-                <div class="col-7 d-flex">
-                    <div id="dateInput" style="display: none">
-                        <div class="m-1">
-                            <p>Desde:</p>
-                            <input type="date">
-                        </div>
-                        <div class="m-1">
-                            <p>Hasta:</p>
-                            <input type="date">
-                        </div>
-                    </div>
-                    <div id="amountInput" style="display: none" class="m-1">
-                        <p>Ingrese monto: </p>
-                        <input type="number" min="0" placeholder="...">
-                    </div>
-                    <div id="categoryInput" style="display:none">
-                        <p>Seleccione la categoría</p>
-                        <select class="form-select">
-                            @foreach (var category in categories)
+            <form asp-action="index" method="get" asp-controller="MoneyTransaction">
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="col-2">Buscar:</p>
+                    <div class="col-10">
+                        <Select id="searchSelect" class="form-select" name="searchingMethod">
+                            @if (Model.searchingMethod == "amount")
                             {
-                                <option>@category.CategoryName</option>
+                                <option value="amount" selected>Monto</option>
+                                <option value="date">Fechas</option>
+                                <option value="category">Categoría</option>
                             }
-                        </select>
+                            else if (Model.searchingMethod == "date")
+                            {
+                                <option value="amount">Monto</option>
+                                <option value="date" selected>Fechas</option>
+                                <option value="category">Categoría</option>
+                            }
+                            else if (Model.searchingMethod == "category")
+                            {
+                                <option value="amount">Monto</option>
+                                <option value="date">Fechas</option>
+                                <option value="category" selected>Categoría</option>
+                            }
+                            else
+                            {
+                                <option disabled selected value="none">Seleccionar filtro</option>
+                                <option value="amount">Monto</option>
+                                <option value="date">Fechas</option>
+                                <option value="category">Categoría</option>
+
+                            }
+                        </Select>
                     </div>
                 </div>
-                <div class="d-flex col-5 justify-content-between">
-                    <button id="cleanFilters" style="display:none" class="col-4">Limpiar</button>
-                    <button style="display:none" id="searchButton" class="col-7">Buscar</button>
+                <div class="d-flex">
+                    <div class="col-7 d-flex">
+                        <div id="dateInput" @(Model.searchingMethod == "date" ? "" : @Html.Raw("style=\"display: none\""))>
+                            <div class="m-1">
+                                <p>Desde:</p>
+                                <input type="date" name="firstDateFilter" value="@Model.firstDate">
+                            </div>
+                            <div class="m-1">
+                                <p>Hasta:</p>
+                                <input type="date" name="lastDateFilter" value="@Model.lastDate">
+                            </div>
+                        </div>
+                        <div id="amountInput" @(Model.searchingMethod == "amount" ? "" : @Html.Raw("style=\"display: none\""))>
+                            <div class="m-1">
+                                <p>Monto mínimo: </p>
+                                <input type="number" min="0" placeholder="..." name="minAmountFilter" value="@Model.minAmount">
+                            </div>
+                            <div class="m-1">
+                                <p>Monto máximo: </p>
+                                <input type="number" min="0" placeholder="..." name="maxAmountFilter" value="@Model.maxAmount">
+                            </div>
+                        </div>
+                        <div id="categoryInput" @(Model.searchingMethod == "category" ? "" : @Html.Raw("style=\"display: none\""))>
+                            <p>Seleccione la categoría</p>
+                            <select name="categoryFilter" class="form-select">
+                                @if (Model.category != null)
+                                {
+                                    foreach (var category in Model.categoryList)
+                                    {
+                                        if (Model.category == category.CategoryName)
+                                        {
+                                            <option value="@category.CategoryName" selected>@category.CategoryName</option>
+                                        } else {
+                                            <option value="@category.CategoryName">@category.CategoryName</option>
+                                        }
+                                    }
+                                } else {
+                                    <option value="" selected disabled></option>
+                                    foreach (var category in Model.categoryList)
+                                    {
+                                        <option value="@category.CategoryName">@category.CategoryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex col-5 justify-content-between">
+                        <button id="cleanFilters" class="col-4" type="button" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Limpiar</button>
+                        <button id="searchButton" class="col-7" type="submit" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Buscar</button>
+                    </div>
                 </div>
-            </div>
+            </form>
             
         </div>
     </div>
-    <details class="drop mt-5">
+    <details class="drop mt-5" open>
         <summary>Ingresos</summary>
         <div class="d-flex justify-content-end">
             <button>Añadir ingreso</button>
@@ -92,7 +126,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var transaction in Model)
+                @foreach (var transaction in Model.transactionList)
                 {
                     if (transaction.IsIncome) {
                         <tr>
@@ -106,7 +140,7 @@
             </tbody>
         </table>
     </details>
-    <details class="drop mt-5">
+    <details class="drop mt-5" open>
         <summary>Gastos</summary>
         <div class="d-flex justify-content-end">
             <button>Añadir gasto</button>
@@ -121,7 +155,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var transaction in Model)
+                @foreach (var transaction in Model.transactionList)
                 {
                     if (!transaction.IsIncome)
                     {

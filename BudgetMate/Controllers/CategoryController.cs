@@ -16,12 +16,6 @@ namespace BudgetMate.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
-        }
-
-        public IActionResult Create()
-        {
-            ViewData["Categories"] = new SelectList(_context.Categories, "CategoryID", "CategoryName");
             return View();
         }
 

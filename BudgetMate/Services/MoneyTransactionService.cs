@@ -19,6 +19,20 @@ namespace BudgetMate.Services
             return transactions;
         }
 
+        public async Task<List<Category>> GetAllCategoriesFrom(int id)
+        {
+            var transactions = await GetAllTransactionsFrom(id);
+            var categories = new List<Category>();
+            foreach (var transiction in transactions)
+            {
+                if (!categories.Contains(transiction.Category))
+                {
+                    categories.Add(transiction.Category);
+                }
+            }
+            return categories;
+        }
+
         public async Task<decimal> GetTotalIncomeFrom(int id)
         {
             var incomeAmount = 0m;

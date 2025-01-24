@@ -1,10 +1,11 @@
-﻿
-const searchSelect = document.getElementById('searchSelect')
+﻿const searchSelect = document.getElementById('searchSelect')
 const dateInput = document.getElementById('dateInput')
 const amountInput = document.getElementById('amountInput')
 const categoryInput = document.getElementById('categoryInput')
 const cleanFilters = document.getElementById('cleanFilters')
 const searchButton = document.getElementById('searchButton')
+const inputs = document.querySelectorAll('input')
+const form = document.querySelector('form')
 
 searchSelect.addEventListener('change', (event) => {
     switch (event.target.value) {
@@ -28,12 +29,12 @@ searchSelect.addEventListener('change', (event) => {
     searchButton.style.display = 'block'
 })
 
-cleanFilters.addEventListener('click', () => {
-    (event) => {
-        searchSelect.target.value = 'none'
-        dateInput.style.display = 'none'
-        categoryInput.style.display = 'none'
-        amountInput.style.display = 'none'
-        cleanFilters.style.display = 'none'
-        searchButton.style.display = 'none'
-    }})
+cleanFilters.addEventListener('click', (event) => {
+    dateInput.style.display = 'none'
+    categoryInput.style.display = 'none'
+    amountInput.style.display = 'none'
+    cleanFilters.style.display = 'none'
+    searchButton.style.display = 'none'
+    searchSelect.value = 'none'
+    form.submit();
+})
