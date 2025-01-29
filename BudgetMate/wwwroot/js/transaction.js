@@ -1,40 +1,85 @@
-﻿const searchSelect = document.getElementById('searchSelect')
-const dateInput = document.getElementById('dateInput')
-const amountInput = document.getElementById('amountInput')
-const categoryInput = document.getElementById('categoryInput')
-const cleanFilters = document.getElementById('cleanFilters')
+﻿const searchingMethod = document.getElementById('searchingMethod')
+const dateSelection = document.getElementById('dateSelection')
+const amountSelection = document.getElementById('amountSelection')
+const categorySelection = document.getElementById('categorySelection')
+const clearFilters = document.getElementById('clearFilters')
 const searchButton = document.getElementById('searchButton')
-const inputs = document.querySelectorAll('input')
-const form = document.querySelector('form')
+const filterForm = document.getElementById('filterForm')
+const addTransactionButton = document.getElementById('addTransaction')
+const transactionType = document.getElementById('transactionType')
+const addTransactionForm = document.getElementById('transactionForm')
+const cancelAddTransaction = document.getElementById('cancelAddTransaction')
+const addedData = [document.getElementById('addedDate'), document.getElementById('addedAmount'), document.getElementById('addedCategory')]
 
-searchSelect.addEventListener('change', (event) => {
+searchingMethod.addEventListener('change', (event) => {
     switch (event.target.value) {
         case 'amount':
-            dateInput.style.display = 'none'
-            categoryInput.style.display = 'none'
-            amountInput.style.display = 'block'
+            dateSelection.style.display = 'none'
+            categorySelection.style.display = 'none'
+            amountSelection.style.display = 'block'
             break;
         case 'date':
-            dateInput.style.display = 'flex'
-            categoryInput.style.display = 'none'
-            amountInput.style.display = 'none'
+            dateSelection.style.display = 'flex'
+            categorySelection.style.display = 'none'
+            amountSelection.style.display = 'none'
             break;
         case 'category':
-            dateInput.style.display = 'none'
-            categoryInput.style.display = 'block'
-            amountInput.style.display = 'none'
+            dateSelection.style.display = 'none'
+            categorySelection.style.display = 'block'
+            amountSelection.style.display = 'none'
             break;
     }
-    cleanFilters.style.display = 'block'
+    clearFilters.style.display = 'block'
     searchButton.style.display = 'block'
 })
 
-cleanFilters.addEventListener('click', (event) => {
-    dateInput.style.display = 'none'
-    categoryInput.style.display = 'none'
-    amountInput.style.display = 'none'
-    cleanFilters.style.display = 'none'
+clearFilters.addEventListener('click', (event) => {
+    dateSelection.style.display = 'none'
+    categorySelection.style.display = 'none'
+    amountSelection.style.display = 'none'
+    clearFilters.style.display = 'none'
     searchButton.style.display = 'none'
-    searchSelect.value = 'none'
-    form.submit();
+    searchingMethod.value = 'none'
+    filterForm.submit();
+})
+
+filterForm.addEventListener('submit', (event) => {
+    switch (searchingMethod.value) {
+        case 'date':
+            if (document.getElementById('startingDate').value > document.getElementById('endingDate').value) {
+                event.preventDefault()
+                alert('La fecha inicial ha de ser menor o igual que la final')
+            }
+            break;
+        case 'amount':
+            if (document.getElementById('minAmount').value > document.getElementById('maxAmount').value) {
+                event.preventDefault()
+                alert('El monto inicial ha de ser menor o igual que el final')
+            }
+            break;
+    }
+})
+
+function areRequiredInputsFilled() {
+    var validation = true
+    addedData.forEach(input => {
+        if (input.value == "") {
+            validation = false
+        }
+    })
+    return validation
+}
+
+addTransactionButton.addEventListener('click', (event) => {
+    if (areRequiredInputsFilled()) {
+        addTransactionForm.submit()
+        bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
+    } else {
+        event.preventDefault()
+        alert('Falta información necesaria')
+    }
+})
+
+cancelAddTransaction.addEventListener('click', (event) => {
+    addTransactionForm.reset();
 })

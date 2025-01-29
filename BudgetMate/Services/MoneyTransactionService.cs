@@ -1,4 +1,6 @@
 ﻿using BudgetMate.Models;
+using BudgetMate.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetMate.Services
@@ -6,10 +8,12 @@ namespace BudgetMate.Services
     public class MoneyTransactionService
     {
         private readonly MoneyManagerContext _context;
+        private readonly CategoryService _categoryService;
         
-        public MoneyTransactionService(MoneyManagerContext context)
+        public MoneyTransactionService(MoneyManagerContext context, CategoryService categoryService)
         {
             _context = context;
+            _categoryService = categoryService;
         }
 
         //All transactions
@@ -159,6 +163,156 @@ namespace BudgetMate.Services
             var sortedTransactions = transactions.OrderByDescending(t => t.TransactionDate).ToList();
             var lastTransactions = sortedTransactions.Take(count).ToList();
             return lastTransactions;
+        }
+
+        //Filtering
+        public async Task<FilterViewModel> GetFilteredTransactions(string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
+        {
+            var transactions = await GetAllTransactionsFrom(0);
+            var filteredIncomes = new List<MoneyTransaction>();
+            var filteredExpenses = new List<MoneyTransaction>();
+            var viewModel = new FilterViewModel { };
+            if (searchingMethod == "date")
+            {
+                DateOnly firstDate = DateOnly.MinValue;
+                if (startingDate.HasValue)
+                {
+                    firstDate = DateOnly.FromDateTime(startingDate.Value);
+                }
+                DateOnly lastDate = DateOnly.FromDateTime(DateTime.Now.Date);
+                if (endingDate.HasValue)
+                {
+                    lastDate = DateOnly.FromDateTime(endingDate.Value);
+                }
+                foreach (var t in transactions)
+                {
+                    if ((t.TransactionDate >= firstDate) && (t.TransactionDate <= lastDate))
+                    {
+                        if (t.IsIncome)
+                        {
+                            filteredIncomes.Add(t);
+                        }
+                        else
+                        {
+                            filteredExpenses.Add(t);
+                        }
+                    }
+                }
+                viewModel = new FilterViewModel
+                {
+                    searchingMethod = searchingMethod,
+                    startingDate = firstDate.ToString("yyyy-MM-dd") == "0001-01-01" ? null : firstDate.ToString("yyyy-MM-dd"),
+                    endingDate = lastDate.ToString("yyyy-MM-dd"),
+                    minAmount = null,
+                    maxAmount = null,
+                    incomeList = filteredIncomes,
+                    expenseList = filteredExpenses,
+                };
+            }
+            else if (searchingMethod == "category")
+            {
+                foreach (var t in transactions)
+                {
+                    if (t.Category.CategoryName == categorySelected)
+                    {
+                        if (t.IsIncome)
+                        {
+                            filteredIncomes.Add(t);
+                        }
+                        else
+                        {
+                            filteredExpenses.Add(t);
+                        }
+                    }
+                }
+                viewModel = new FilterViewModel
+                {
+                    searchingMethod = searchingMethod,
+                    startingDate = null,
+                    endingDate = null,
+                    minAmount = null,
+                    maxAmount = null,
+                    category = categorySelected,
+                    incomeList = filteredIncomes,
+                    expenseList = filteredExpenses,
+                };
+            }
+            else if (searchingMethod == "amount")
+            {
+                minAmount = minAmount == null ? 0m : minAmount;
+                maxAmount = maxAmount == null ? 999999999m : maxAmount;
+                foreach (var t in transactions)
+                {
+                    if ((t.Amount >= minAmount) && (t.Amount <= maxAmount))
+                    {
+                        if (t.IsIncome)
+                        {
+                            filteredIncomes.Add(t);
+                        }
+                        else
+                        {
+                            filteredExpenses.Add(t);
+                        }
+                    }
+                }
+                viewModel = new FilterViewModel
+                {
+                    searchingMethod = searchingMethod,
+                    startingDate = null,
+                    endingDate = null,
+                    minAmount = minAmount,
+                    maxAmount = maxAmount == 999999999m ? null : maxAmount,
+                    incomeList = filteredIncomes,
+                    expenseList = filteredExpenses,
+                };
+            }
+            else
+            {
+                foreach (var t in transactions)
+                {
+                    if (t.IsIncome)
+                    {
+                        filteredIncomes.Add(t);
+                    }
+                    else
+                    {
+                        filteredExpenses.Add(t);
+                    }
+                }
+
+                viewModel = new FilterViewModel
+                {
+                    searchingMethod = searchingMethod,
+                    startingDate = null,
+                    endingDate = null,
+                    minAmount = null,
+                    maxAmount = null,
+                    incomeList = filteredIncomes,
+                    expenseList = filteredExpenses,
+                };
+            }
+
+            viewModel.actualCategories = await GetAllCategoriesFrom(0);
+            viewModel.allCategories = await _categoryService.GetAllCategories();
+
+            return viewModel;
+        }
+
+        //Create
+
+        public void CreateTransaction(DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        {
+            var moneyTransaction = new MoneyTransaction
+            {
+                Amount = addedAmount,
+                TransactionDate = DateOnly.FromDateTime(addedDate),
+                UserId = 0,
+                TransactionDescription = addedDescription,
+                CategoryId = addedCategory,
+                IsIncome = transactionType == "income",
+            };
+            _context.Add(moneyTransaction);
+            _context.SaveChanges();
         }
 
     };
