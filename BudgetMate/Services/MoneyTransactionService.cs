@@ -329,5 +329,12 @@ namespace BudgetMate.Services
             }
         }
 
+        public void DeleteTransaction(int transactionId)
+        {
+            var transaction = _context.MoneyTransactions.First(t => t.TransactionId == transactionId);
+            _context.MoneyTransactions.Remove(transaction);
+            _context.SaveChanges();
+        }
+
     };
 }

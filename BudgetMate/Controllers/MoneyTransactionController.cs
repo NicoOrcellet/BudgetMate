@@ -39,6 +39,13 @@ namespace BudgetMate.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult Delete(int transactionId)
+        {
+            _transactionService.DeleteTransaction(transactionId);
+            return RedirectToAction("Index");
+        }
+
     };
 
 }

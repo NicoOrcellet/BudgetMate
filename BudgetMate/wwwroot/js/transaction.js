@@ -12,6 +12,7 @@ const cancelAddTransaction = document.getElementById('cancelAddTransaction')
 const addedData = [document.getElementById('addedDate'), document.getElementById('addedAmount'), document.getElementById('addedCategory')]
 const callModalButtons = document.querySelectorAll('[data-bs-toggle="modal"]')
 const transactionId = document.getElementById('transactionId')
+const deleteForms = document.querySelectorAll('#deleteTransactionForm')
 
 searchingMethod.addEventListener('change', (event) => {
     switch (event.target.value) {
@@ -105,6 +106,16 @@ callModalButtons.forEach(button => {
             addTransactionForm.reset()
             addTransactionForm.setAttribute('action','/MoneyTransaction/Create')
             addTransactionButton.textContent = 'Agregar'
+        }
+    })
+})
+
+deleteForms.forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        if (confirm('¿Está seguro de eliminar esta transacción? Esta acción no se puede deshacer')) {
+            form.submit()
+        } else {
+            event.preventDefault()
         }
     })
 })

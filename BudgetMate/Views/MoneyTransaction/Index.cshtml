@@ -144,7 +144,12 @@
                                         <button type="button" data-bs-toggle="dropdown">...</button>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
-                                            <li class="dropdown-item"><button class="ModifyButton">Eliminar</button></li>
+                                            <li class="dropdown-item">
+                                                <form id="deleteTransactionForm" method="post" action="/MoneyTransaction/Delete">
+                                                    <input name="transactionId" type="hidden" value="@transaction.TransactionId"/>
+                                                    <button class="ModifyButton">Eliminar</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -185,7 +190,12 @@
                                         <button type="button" data-bs-toggle="dropdown">...</button>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
-                                            <li class="dropdown-item"><button class="ModifyButton">Eliminar</button></li>
+                                            <li class="dropdown-item">
+                                                <form id="deleteTransactionForm" method="post" action="/MoneyTransaction/Delete">
+                                                    <input name="transactionId" type="hidden" value="@transaction.TransactionId"/>
+                                                    <button id="deleteButton" class="ModifyButton">Eliminar</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
