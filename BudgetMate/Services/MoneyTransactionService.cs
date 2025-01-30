@@ -315,5 +315,19 @@ namespace BudgetMate.Services
             _context.SaveChanges();
         }
 
+        public void ModifyTransaction(int transactionId, DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        {
+            var transaction = _context.MoneyTransactions.FirstOrDefault(t => t.TransactionId == transactionId);
+            if (transaction != null)
+            {
+                transaction.TransactionDate = DateOnly.FromDateTime(addedDate);
+                transaction.Amount = addedAmount;
+                transaction.CategoryId = addedCategory;
+                transaction.TransactionDescription = addedDescription;
+                transaction.IsIncome = transactionType == "income";
+                _context.SaveChanges();
+            }
+        }
+
     };
 }

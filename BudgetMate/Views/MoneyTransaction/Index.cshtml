@@ -15,6 +15,12 @@
         -webkit-appearance: none;
         margin: 0;
     }
+
+    .ModifyButton{
+        background:none;
+        border: 1px transparent;
+    }
+
 </style>
 
 <div class="container px-4">
@@ -109,7 +115,7 @@
             </form>
         </div>
     </div>
-    <button class="createTransaction" data-bs-toggle="modal" data-bs-target="#creationModal">Añadir Transacción</button>
+    <button class="createTransaction" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Add">Añadir Transacción</button>
     <details class="drop mt-5" open>
         <summary>Ingresos</summary>
         @{
@@ -122,16 +128,26 @@
                             <th>Fecha</th>
                             <th>Descripción</th>
                             <th>Categoría</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var transaction in Model.incomeList)
                         {
-                            <tr>
+                            <tr data-transactionId="@transaction.TransactionId">
                                 <td>@Html.DisplayFor(m => transaction.Amount)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
                                 <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
+                                <td>
+                                    <div class="dropdown dropend">
+                                        <button type="button" data-bs-toggle="dropdown">...</button>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
+                                            <li class="dropdown-item"><button class="ModifyButton">Eliminar</button></li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -159,11 +175,20 @@
                     <tbody>
                         @foreach (var transaction in Model.expenseList)
                         {
-                            <tr>
+                            <tr data-transactionId="@transaction.TransactionId">
                                 <td>@Html.DisplayFor(m => transaction.Amount)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
                                 <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
+                                <td>
+                                    <div class="dropdown dropend">
+                                        <button type="button" data-bs-toggle="dropdown">...</button>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
+                                            <li class="dropdown-item"><button class="ModifyButton">Eliminar</button></li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -181,9 +206,9 @@
     <div class="modal-dialog-centered modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <form id="transactionForm" asp-action="Create" asp-controller="MoneyTransaction" method="post">
+                <form id="transactionForm" action="/MoneyTransaction/Create" method="post">
                     <p>Fecha:</p>
-                    <input id="addedDate" type="date">
+                    <input id="addedDate" name="addedDate" type="date">
                     <p>Tipo de transacción</p>
                     <select id="transactionType" class="form-select" name="transactionType">
                         <option value="income">Ingreso</option>
@@ -201,6 +226,7 @@
                     </select>
                     <p>Descripción (opcional):</p>
                     <input id="addedDescription" name="addedDescription" class="w-75 h-25" type="text">
+                    <input type="hidden" name="transactionId" id="transactionId">
                 </form>
             </div>
             <div class="modal-footer">

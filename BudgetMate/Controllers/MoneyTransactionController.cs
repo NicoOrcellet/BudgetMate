@@ -19,7 +19,7 @@ namespace BudgetMate.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
+        public async Task<IActionResult> Index(int transictionId, string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
         {
             var viewModel = await _transactionService.GetFilteredTransactions(searchingMethod, startingDate, endingDate, minAmount, maxAmount, categorySelected);
             return View(viewModel);
@@ -29,6 +29,13 @@ namespace BudgetMate.Controllers
         public IActionResult Create(DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
         {
             _transactionService.CreateTransaction(addedDate, addedAmount, addedCategory, addedDescription, transactionType);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Modify(int transactionId, DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        {
+            _transactionService.ModifyTransaction(transactionId,addedDate,addedAmount,addedCategory, addedDescription, transactionType);
             return RedirectToAction("Index");
         }
 
