@@ -9,7 +9,7 @@ const addTransactionButton = document.getElementById('addTransaction')
 const transactionType = document.getElementById('transactionType')
 const addTransactionForm = document.getElementById('transactionForm')
 const cancelAddTransaction = document.getElementById('cancelAddTransaction')
-const addedData = [document.getElementById('addedDate'), document.getElementById('addedAmount'), document.getElementById('addedCategory')]
+const addedData = [document.getElementById('addedDate'), document.getElementById('addedAmount'), document.getElementById('CategoryId')]
 const callModalButtons = document.querySelectorAll('[data-bs-toggle="modal"]')
 const transactionId = document.getElementById('transactionId')
 const deleteForms = document.querySelectorAll('#deleteTransactionForm')
@@ -74,6 +74,9 @@ function areRequiredInputsFilled() {
 }
 
 addTransactionButton.addEventListener('click', (event) => {
+    addTransactionForm.submit()
+    bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
+    /*
     if (areRequiredInputsFilled()) {
         addTransactionForm.submit()
         bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
@@ -81,10 +84,7 @@ addTransactionButton.addEventListener('click', (event) => {
         event.preventDefault()
         alert('Falta información necesaria')
     }
-})
-
-cancelAddTransaction.addEventListener('click', (event) => {
-    addTransactionForm.reset()
+    */
 })
 
 callModalButtons.forEach(button => {
@@ -93,15 +93,16 @@ callModalButtons.forEach(button => {
         if (op == 'Modify') {
             const row = this.closest('tr')
             const values = Array.from(row.querySelectorAll('td:not(:last-child)')).map(td => td.textContent)
-            document.getElementById('addedAmount').value = values[0].replace(',', '.')
+            document.getElementById('addedAmount').value = parseFloat(values[0].replace(',','.'))
             const parts = values[1].split('/')
             document.getElementById('addedDate').value = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
-            document.getElementById('addedDescription').value = values[2]
-            const addedCatergory = document.getElementById('addedCategory')
-            addedCatergory.value = Array.from(addedCatergory.options).find(option => option.textContent == values[3]).value
+            document.getElementById('TransactionDescription').value = values[2]
+            const CategoryId = document.getElementById('CategoryId')
+            CategoryId.value = Array.from(CategoryId.options).find(option => option.textContent == values[3]).value
             addTransactionForm.setAttribute('action', '/MoneyTransaction/Modify')
             addTransactionButton.textContent = 'Modificar'
             transactionId.value = row.getAttribute('data-transactionId')
+            transactionType.value = row.getAttribute('data-transactionType')
         } else {
             addTransactionForm.reset()
             addTransactionForm.setAttribute('action','/MoneyTransaction/Create')

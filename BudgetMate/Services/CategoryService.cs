@@ -17,5 +17,10 @@ namespace BudgetMate.Services
             return categories;
         }
 
+        public bool ExistsCategory(int id)
+        {
+            return _context.Categories.Any(c => c.CategoryId == id);
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using BudgetMate.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace BudgetMate.Services
 {
@@ -298,34 +299,61 @@ namespace BudgetMate.Services
             return viewModel;
         }
 
-        //Create
+        //CUD
 
-        public void CreateTransaction(DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        public MoneyTransaction validateTransactionInfo(MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            var moneyTransaction = new MoneyTransaction
+            if (!_categoryService.ExistsCategory(model.CategoryId))
             {
-                Amount = addedAmount,
-                TransactionDate = DateOnly.FromDateTime(addedDate),
-                UserId = 0,
-                TransactionDescription = addedDescription,
-                CategoryId = addedCategory,
-                IsIncome = transactionType == "income",
-            };
-            _context.Add(moneyTransaction);
+                throw new ArgumentException("La categoría no existe");
+            }
+            if (transactionType != "income" && transactionType != "expense")
+            {
+                throw new ArgumentException("El tipo de transacción no existe");
+            }
+            try
+            {
+                model.TransactionDate = DateOnly.FromDateTime(addedDate) == DateOnly.MinValue ? throw new Exception() : DateOnly.FromDateTime(addedDate);
+            } catch (Exception)
+            {
+                throw new ArgumentException("La fecha ingresado es inválida");
+            }
+            if (Decimal.TryParse(addedAmount, CultureInfo.InvariantCulture, out decimal amount))
+            {
+                model.Amount = amount;
+                return model;
+            }
+            else
+            {
+                throw new ArgumentException("El monto ingresado no es valido");
+            }
+        }
+
+        public void CreateTransaction(MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
+        {
+            validateTransactionInfo(model, addedDate, addedAmount, transactionType);
+            model.IsIncome = transactionType == "income";
+            model.UserId = 0;
+            _context.Add(model);
             _context.SaveChanges();
         }
 
-        public void ModifyTransaction(int transactionId, DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        public void ModifyTransaction(int transactionId, MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            var transaction = _context.MoneyTransactions.FirstOrDefault(t => t.TransactionId == transactionId);
+            var transaction = _context.MoneyTransactions.First(t => t.TransactionId == transactionId);
             if (transaction != null)
             {
-                transaction.TransactionDate = DateOnly.FromDateTime(addedDate);
-                transaction.Amount = addedAmount;
-                transaction.CategoryId = addedCategory;
-                transaction.TransactionDescription = addedDescription;
+                validateTransactionInfo(model, addedDate, addedAmount, transactionType);
+                transaction.TransactionDate = model.TransactionDate;
+                transaction.Amount = model.Amount;
+                transaction.CategoryId = model.CategoryId;
+                transaction.TransactionDescription = model.TransactionDescription;
                 transaction.IsIncome = transactionType == "income";
                 _context.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("No se pudo modificar la transacción");
             }
         }
 

@@ -26,16 +26,41 @@ namespace BudgetMate.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        public IActionResult Create(MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            _transactionService.CreateTransaction(addedDate, addedAmount, addedCategory, addedDescription, transactionType);
+            try
+            {
+                model.IsIncome = transactionType == "income";
+                _transactionService.CreateTransaction(model, addedDate, addedAmount, transactionType);
+            }
+            catch (ArgumentException err)
+            {
+                TempData["ErrorMessage"] = err.Message;
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+            }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Modify(int transactionId, DateTime addedDate, decimal addedAmount, int addedCategory, string? addedDescription, string transactionType)
+        public IActionResult Modify(int transactionId, MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            _transactionService.ModifyTransaction(transactionId,addedDate,addedAmount,addedCategory, addedDescription, transactionType);
+            try
+            {
+                model.IsIncome = transactionType == "income";
+                _transactionService.ModifyTransaction(transactionId, model, addedDate, addedAmount, transactionType);
+                return RedirectToAction("Index");
+            }
+            catch (ArgumentException err)
+            {
+                TempData["ErrorMessage"] = err.Message;
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+            }
             return RedirectToAction("Index");
         }
 

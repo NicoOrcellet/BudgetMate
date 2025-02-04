@@ -134,7 +134,7 @@
                     <tbody>
                         @foreach (var transaction in Model.incomeList)
                         {
-                            <tr data-transactionId="@transaction.TransactionId">
+                            <tr data-transactionType="income" data-transactionId="@transaction.TransactionId">
                                 <td>@Html.DisplayFor(m => transaction.Amount)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
@@ -180,7 +180,7 @@
                     <tbody>
                         @foreach (var transaction in Model.expenseList)
                         {
-                            <tr data-transactionId="@transaction.TransactionId">
+                            <tr data-transactionType="expense" data-transactionId="@transaction.TransactionId">
                                 <td>@Html.DisplayFor(m => transaction.Amount)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
                                 <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
@@ -223,19 +223,21 @@
                     <select id="transactionType" class="form-select" name="transactionType">
                         <option value="income">Ingreso</option>
                         <option value="expense">Gasto</option>
+                        <option value="error">Invalido</option>
                     </select>
                     <p>Monto:</p>
-                    <input id="addedAmount" name="addedAmount" type="number" min="0" placeholder="...">
+                    <input id="addedAmount" name="addedAmount" type="number" min="0">
                     <p>Categoría:</p>
-                    <select id="addedCategory" name="addedCategory">
+                    <select id="CategoryId" name="CategoryId">
                         <option selected disabled></option>
+                        <option value="999">Invalido</option>
                         @foreach (var category in Model.allCategories)
                         {
                             <option value="@category.CategoryId">@category.CategoryName</option>
                         }
                     </select>
                     <p>Descripción (opcional):</p>
-                    <input id="addedDescription" name="addedDescription" class="w-75 h-25" type="text">
+                    <input id="TransactionDescription" name="TransactionDescription" class="w-75 h-25" type="text">
                     <input type="hidden" name="transactionId" id="transactionId">
                 </form>
             </div>
@@ -245,6 +247,12 @@
             </div>
         </div>
     </div>
+</div>
+<div class="text-danger">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
 </div>
 
 <script src="~/js/transaction.js"></script>
