@@ -17,7 +17,6 @@ namespace BudgetMate.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //Decide how many add
             var totalIncome = await _moneyTransactionService.GetTotalIncomeFrom(0);
             var totalExpense = await _moneyTransactionService.GetTotalExpenseFrom(0);
             var monthIncome = await _moneyTransactionService.GetActualMonthIncomeFrom(0);

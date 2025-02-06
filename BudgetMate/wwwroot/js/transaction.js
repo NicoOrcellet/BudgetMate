@@ -74,9 +74,6 @@ function areRequiredInputsFilled() {
 }
 
 addTransactionButton.addEventListener('click', (event) => {
-    addTransactionForm.submit()
-    bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
-    /*
     if (areRequiredInputsFilled()) {
         addTransactionForm.submit()
         bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
@@ -84,7 +81,6 @@ addTransactionButton.addEventListener('click', (event) => {
         event.preventDefault()
         alert('Falta información necesaria')
     }
-    */
 })
 
 callModalButtons.forEach(button => {

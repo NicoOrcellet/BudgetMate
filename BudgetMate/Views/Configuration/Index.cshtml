@@ -1,0 +1,100 @@
+﻿@using BudgetMate.ViewModels
+@model ConfigurationViewModel
+
+<style>
+    body{
+        background-color: #D9D9D9;
+    }
+
+    .infoCard{
+        background-color: white;
+    }
+</style>
+
+<h1>Configuración</h1>
+<div id="savingLimit" class="infoCard" data-recentPeriod="@TempData["Period"]">
+    <div class="row">
+        <div id="monthLimitDisplay" class="col-8">
+            @{
+                if (Model.monthSavingLimit == null){
+                    <p>Parece que no tienes un límite de ahorro mensual establecido</p>
+                    <p>¿Por qué no agregas uno?</p>
+                    <div>
+                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Mensual">Agregar Límite</button>
+                    </div>
+                } else {
+                    <div>
+                        <p>Ahorro mensual establecido:</p>
+                        <p><span>@Model.monthExpense</span>/<span id="monthLimit">@Model.monthSavingLimit.Amount</span></p>
+                    </div>
+                    <div>
+                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Mensual" data-limitId="@Model.monthSavingLimit.SavingLimitId">Cambiar Límite</button>
+                        <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
+                            <input name="eraseLimitId" type="hidden" value="@Model.monthSavingLimit.SavingLimitId">
+                            <button>Eliminar Límite</button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+        <div id="weekLimitDisplay" class="col-8" style="display:none">
+            @{
+                if (Model.weekSavingLimit == null)
+                {
+                    <p>Parece que no tienes un límite de ahorro semanal establecido</p>
+                    <p>¿Por qué no agregas uno?</p>
+                    <div>
+                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Semanal">Agregar Límite</button>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <p>Ahorro semanal establecido:</p>
+                        <p><span>@Model.weekExpense</span>/<span id="weekLimit">@Model.weekSavingLimit.Amount</span></p>
+                    </div>
+                    <div>
+                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Semanal" data-limitId="@Model.weekSavingLimit.SavingLimitId">Cambiar Límite</button>
+                        <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
+                            <input name="eraseLimitId" type="hidden" value="@Model.weekSavingLimit.SavingLimitId">
+                            <button>Eliminar Límite</button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+        <select id="limitPeriod" class="form-select-sm w-25 col-4">
+            <option value="month" select>Mensual</option>
+            <option value="week">Semanal</option>
+        </select>
+    </div>
+</div>
+
+<div id="postLimit" class="modal fade">
+    <div class="modal-dialog-centered modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="addLimitForm" method="post">
+                    <p>Periodo:</p>
+                    <input id="periodValue" name="periodValue" type="text" readonly>
+                    <p>Límite de ahorro:</p>
+                    <input id="limitAmount" name="limitAmount" type="number" min="0">
+                    <input id="limitId" name="limitId" type="hidden">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal">Cancelar</button>
+                <button id="addLimitButton" type="button">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-danger">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+</div>
+
+<script src="~/js/configuration.js"></script>

@@ -223,14 +223,12 @@
                     <select id="transactionType" class="form-select" name="transactionType">
                         <option value="income">Ingreso</option>
                         <option value="expense">Gasto</option>
-                        <option value="error">Invalido</option>
                     </select>
                     <p>Monto:</p>
                     <input id="addedAmount" name="addedAmount" type="number" min="0">
                     <p>Categoría:</p>
                     <select id="CategoryId" name="CategoryId">
                         <option selected disabled></option>
-                        <option value="999">Invalido</option>
                         @foreach (var category in Model.allCategories)
                         {
                             <option value="@category.CategoryId">@category.CategoryName</option>

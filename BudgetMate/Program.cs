@@ -10,6 +10,8 @@ builder.Services.AddControllersWithViews();
 //Dependencias
 builder.Services.AddScoped<MoneyTransactionService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<SavingLimitService>();
+builder.Services.AddScoped<ConfigurationService>();
 
 builder.Services.AddDbContext<MoneyManagerContext>(options =>
 {

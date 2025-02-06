@@ -51,7 +51,6 @@ namespace BudgetMate.Controllers
             {
                 model.IsIncome = transactionType == "income";
                 _transactionService.ModifyTransaction(transactionId, model, addedDate, addedAmount, transactionType);
-                return RedirectToAction("Index");
             }
             catch (ArgumentException err)
             {
@@ -67,7 +66,18 @@ namespace BudgetMate.Controllers
         [HttpPost]
         public IActionResult Delete(int transactionId)
         {
-            _transactionService.DeleteTransaction(transactionId);
+            try
+            {
+                _transactionService.DeleteTransaction(transactionId);
+            }
+            catch (ArgumentException err)
+            {
+                TempData["ErrorMessage"] = err.Message;
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+            }
             return RedirectToAction("Index");
         }
 
