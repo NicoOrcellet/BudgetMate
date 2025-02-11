@@ -34,6 +34,7 @@
                         <Select id="searchingMethod" class="form-select" name="searchingMethod">
                             @if (Model.searchingMethod == "amount")
                             {
+                                <option disabled value="@Model.searchingMethod">Seleccionar filtro</option>
                                 <option value="amount" selected>Monto</option>
                                 <option value="date">Fechas</option>
                                 <option value="category">Categoría</option>

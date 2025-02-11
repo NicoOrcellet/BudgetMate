@@ -15,34 +15,44 @@ namespace BudgetMate.Services
             _moneyTransactionService = moneyTransactionService;
         }
 
-        public List<SavingLimit> GetSavingLimitsFrom(int id)
+        public async Task<ConfigurationViewModel> GetLimitsAndExpensesFrom(string userId)
         {
-            return _savingLimitService.GetSavingLimitsFrom(id);
+            if (userId == null)
+            {
+                return new ConfigurationViewModel
+                {
+                    monthSavingLimit = null,
+                    weekSavingLimit = null,
+                    monthExpense = null,
+                    weekExpense = null,
+                };
+            }
+            if (!int.TryParse(userId, out var id))
+            {
+                throw new ArgumentException("El ID de usuario no es válido"); ;
+            };
+            return new ConfigurationViewModel
+            {
+                monthSavingLimit = _savingLimitService.GetSavingLimitsFrom(id)[0],
+                weekSavingLimit = _savingLimitService.GetSavingLimitsFrom(id)[1],
+                monthExpense = await _moneyTransactionService.GetActualMonthExpenseFrom(id),
+                weekExpense = await _moneyTransactionService.GetActualWeekExpenseFrom(id),
+            };
         }
 
-        public async Task<decimal> GetActualMonthExpenseFrom(int id)
+        public void CreateSavingLimit(string periodValue, string limitAmount, string userId)
         {
-            return await _moneyTransactionService.GetActualMonthExpenseFrom(id);
+            _savingLimitService.CreateSavingLimit(periodValue, limitAmount, userId);
         }
 
-        public async Task<decimal> GetActualWeekExpenseFrom(int id)
+        public void ModifySavingLimit(int limitId, string periodValue, string limitAmount, string userId)
         {
-            return await _moneyTransactionService.GetActualWeekExpenseFrom(id);
+            _savingLimitService.ModifySavingLimit(limitId, periodValue, limitAmount, userId);
         }
 
-        public void CreateSavingLimit(string periodValue, string limitAmount)
+        public void DeleteSavingLimit(int eraseLimitId, string userId)
         {
-            _savingLimitService.CreateSavingLimit(periodValue, limitAmount);
-        }
-
-        public void ModifySavingLimit(int limitId, string periodValue, string limitAmount)
-        {
-            _savingLimitService.ModifySavingLimit(limitId, periodValue, limitAmount);
-        }
-
-        public void DeleteSavingLimit(int eraseLimitId)
-        {
-            _savingLimitService.DeleteSavingLimit(eraseLimitId);
+            _savingLimitService.DeleteSavingLimit(eraseLimitId, userId);
         }
 
     }

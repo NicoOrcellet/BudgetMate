@@ -44,18 +44,26 @@ namespace BudgetMate.Services
             
         }
 
-        public void CreateSavingLimit(string periodValue, string limitAmount)
+        public void CreateSavingLimit(string periodValue, string limitAmount, string userId)
         {
             var model = validateSavingLimit(periodValue, limitAmount);
-            model.UserId = 0;
+            if (!int.TryParse(userId, out var id))
+            {
+                throw new ArgumentException("El ID de usuario no es válido"); ;
+            };
+            model.UserId = id;
             model.StartDate = DateOnly.FromDateTime(DateTime.Now);
             _context.Add(model);
             _context.SaveChanges();
         }
 
-        public void ModifySavingLimit(int limitId, string periodValue, string limitAmount)
+        public void ModifySavingLimit(int limitId, string periodValue, string limitAmount, string userId)
         {
             SavingLimit? savingLimit = _context.SavingLimits.FirstOrDefault(x => x.SavingLimitId == limitId);
+            if (!int.TryParse(userId, out var id))
+            {
+                throw new Exception();
+            };
             if (savingLimit == null)
             {
                 throw new ArgumentException("No se pudo modificar la transacción");
@@ -66,9 +74,13 @@ namespace BudgetMate.Services
             _context.SaveChanges();
         }
 
-        public void DeleteSavingLimit(int eraseLimitId)
+        public void DeleteSavingLimit(int eraseLimitId, string userId)
         {
             SavingLimit? savingLimit = _context.SavingLimits.FirstOrDefault(x => x.SavingLimitId == eraseLimitId);
+            if (!int.TryParse(userId, out var id))
+            {
+                throw new Exception();
+            };
             if (savingLimit == null)
             {
                 throw new ArgumentException("No se pudo modificar la transacción");

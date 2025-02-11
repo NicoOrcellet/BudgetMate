@@ -21,25 +21,41 @@ namespace BudgetMate.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int transictionId, string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
         {
-            var viewModel = await _transactionService.GetFilteredTransactions(searchingMethod, startingDate, endingDate, minAmount, maxAmount, categorySelected);
+            var viewModel = new FilterViewModel();
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
+            {
+                try
+                {
+                    viewModel = await _transactionService.GetFilteredTransactions(searchingMethod, startingDate, endingDate, minAmount, maxAmount, categorySelected, userId);
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
+            }
             return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult Create(MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            try
+
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                model.IsIncome = transactionType == "income";
-                _transactionService.CreateTransaction(model, addedDate, addedAmount, transactionType);
-            }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                try
+                {
+                    _transactionService.CreateTransaction(model, addedDate, addedAmount, transactionType, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
             }
             return RedirectToAction("Index");
         }
@@ -47,18 +63,22 @@ namespace BudgetMate.Controllers
         [HttpPost]
         public IActionResult Modify(int transactionId, MoneyTransaction model, DateTime addedDate, string addedAmount, string transactionType)
         {
-            try
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                model.IsIncome = transactionType == "income";
-                _transactionService.ModifyTransaction(transactionId, model, addedDate, addedAmount, transactionType);
-            }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                try
+                {
+                    model.IsIncome = transactionType == "income";
+                    _transactionService.ModifyTransaction(transactionId, model, addedDate, addedAmount, transactionType, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
             }
             return RedirectToAction("Index");
         }
@@ -66,17 +86,21 @@ namespace BudgetMate.Controllers
         [HttpPost]
         public IActionResult Delete(int transactionId)
         {
-            try
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                _transactionService.DeleteTransaction(transactionId);
-            }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                try
+                {
+                    _transactionService.DeleteTransaction(transactionId, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
             }
             return RedirectToAction("Index");
         }

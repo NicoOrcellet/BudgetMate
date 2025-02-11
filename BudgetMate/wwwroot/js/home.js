@@ -6,6 +6,16 @@ const incExpSelect = document.getElementById('incomeExpenseSelection')
 const monthIncExp = document.querySelectorAll('.monthIncomeExpense')
 const weekIncExp = document.querySelectorAll('.weekIncomeExpense')
 
+if (!localStorage.getItem("userId")) {
+    const userId = 1
+    localStorage.setItem("userId", userId)
+}
+
+const userId = localStorage.getItem('userId');
+const date = new Date();
+date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+document.cookie = `userId=${userId};expires=${date.toUTCString()};path=/`;
+
 balanceSelect.addEventListener('change', (event) => {
     if (event.target.value == 'month') {
         monthBalance.style.display = 'block';

@@ -5,6 +5,17 @@ const addLimitButton = document.getElementById('addLimitButton')
 const addLimitForm = document.getElementById('addLimitForm')
 const modalCallingButtons = document.querySelectorAll('[data-bs-toggle="modal"]')
 const periodValue = document.getElementById('periodValue')
+const deleteLimitForm = document.querySelectorAll('#deleteLimitForm')
+
+deleteLimitForm.forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        if (confirm('¿Está seguro de eliminar esta transacción? Esta acción no se puede deshacer')) {
+            form.submit()
+        } else {
+            event.preventDefault()
+        }
+    })
+})
 
 if (document.getElementById('savingLimit').getAttribute('data-recentPeriod') == 'week') {
     monthDisplay.style.display = 'none'

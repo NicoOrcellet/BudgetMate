@@ -12,8 +12,6 @@ public partial class MoneyTransaction
     public bool IsIncome { get; set; }
     public DateOnly TransactionDate { get; set; }
     public int CategoryId { get; set; }
-
     public string? TransactionDescription { get; set; }
-
     public virtual Category Category { get; set; } = null!;
 }

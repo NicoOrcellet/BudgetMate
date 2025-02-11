@@ -80,32 +80,48 @@
     </div>
     <div class="row">
         <div>
-            <table class="col-12 infoCard">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Tipo</th>
-                        <th>Categoría</th>
-                        <th>Monto</th>
-                        <th>Descripción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transaction in Model.lastMoneyTransactions){
-                        <tr>
-                            <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
-                            @if (transaction.IsIncome){
-                                <td>Ingreso</td>
-                            } else {
-                                <td>Gasto</td>
+            @{
+                if (Model.lastMoneyTransactions.Count > 0)
+                {
+                    <table class="col-12 infoCard">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var transaction in Model.lastMoneyTransactions)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
+                                        @{if (transaction.IsIncome)
+                                        {
+                                            <td>Ingreso</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Gasto</td>
+                                            }
+                                        }
+                                        <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
+                                        <td>@Html.DisplayFor(m => transaction.Amount)</td>
+                                        <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
+                                    </tr>
+                                }
                             }
-                            <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
-                            <td>@Html.DisplayFor(m => transaction.Amount)</td>
-                            <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encuentra ninguna transacción</p>
+                }
+            }
         </div>
     </div>
 </div>

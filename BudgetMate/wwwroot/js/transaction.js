@@ -46,20 +46,32 @@ clearFilters.addEventListener('click', (event) => {
     filterForm.submit()
 })
 
-filterForm.addEventListener('submit', (event) => {
+function validateFilledFilterInputs(event) {
     switch (searchingMethod.value) {
         case 'date':
             if (document.getElementById('startingDate').value > document.getElementById('endingDate').value) {
                 event.preventDefault()
                 alert('La fecha inicial ha de ser menor o igual que la final')
+                return false
             }
-            break;
+            return true
         case 'amount':
             if (document.getElementById('minAmount').value > document.getElementById('maxAmount').value) {
                 event.preventDefault()
                 alert('El monto inicial ha de ser menor o igual que el final')
+                return false
             }
-            break;
+            return true
+        default:
+            return true
+    }
+}
+
+filterForm.addEventListener('submit', function (event) {
+    if (validateFilledFilterInputs(event)) {
+        filterForm.submit()
+    } else {
+        event.preventDefault()
     }
 })
 

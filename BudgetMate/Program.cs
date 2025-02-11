@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //Dependencias
+builder.Services.AddScoped<HomeService>();
 builder.Services.AddScoped<MoneyTransactionService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<SavingLimitService>();

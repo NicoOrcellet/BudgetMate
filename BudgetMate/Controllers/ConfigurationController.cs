@@ -14,30 +14,40 @@ namespace BudgetMate.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var viewModel = new ConfigurationViewModel
+            var viewModel = new ConfigurationViewModel();
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                monthSavingLimit = _configurationService.GetSavingLimitsFrom(0)[0],
-                weekSavingLimit = _configurationService.GetSavingLimitsFrom(0)[1],
-                monthExpense = await _configurationService.GetActualMonthExpenseFrom(0),
-                weekExpense = await _configurationService.GetActualWeekExpenseFrom(0),
-            };
+                try
+                {
+                    viewModel = await _configurationService.GetLimitsAndExpensesFrom(userId);
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
+            }
             return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult Create(string periodValue, string limitAmount)
         {
-            try
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                _configurationService.CreateSavingLimit(periodValue, limitAmount);
-            }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                try
+                {
+                    _configurationService.CreateSavingLimit(periodValue, limitAmount, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
             }
             TempData["Period"] = periodValue == "Semanal" ? "week" : "month";
             return RedirectToAction("Index");
@@ -46,36 +56,44 @@ namespace BudgetMate.Controllers
         [HttpPost]
         public IActionResult Modify(int limitId, string periodValue, string limitAmount)
         {
-            try
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                _configurationService.ModifySavingLimit(limitId, periodValue, limitAmount);
+                try
+                {
+                    _configurationService.ModifySavingLimit(limitId, periodValue, limitAmount, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
+                TempData["Period"] = periodValue == "Mensual" ? "month" : "week";
             }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
-            }
-            TempData["Period"] = periodValue == "Mensual" ? "month" : "week";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult Delete(int eraseLimitId)
         {
-            try
+            string? userId = Request.Cookies["userId"];
+            if (!string.IsNullOrEmpty(userId))
             {
-                _configurationService.DeleteSavingLimit(eraseLimitId);
-            }
-            catch (ArgumentException err)
-            {
-                TempData["ErrorMessage"] = err.Message;
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                try
+                {
+                    _configurationService.DeleteSavingLimit(eraseLimitId, userId);
+                }
+                catch (ArgumentException err)
+                {
+                    TempData["ErrorMessage"] = err.Message;
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
+                }
             }
             return RedirectToAction("Index");
         }
