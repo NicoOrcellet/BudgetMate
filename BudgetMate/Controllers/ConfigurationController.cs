@@ -12,7 +12,7 @@ namespace BudgetMate.Controllers
         {
             _configurationService = configurationService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var viewModel = new ConfigurationViewModel();
             string? userId = Request.Cookies["userId"];
@@ -20,7 +20,7 @@ namespace BudgetMate.Controllers
             {
                 try
                 {
-                    viewModel = await _configurationService.GetLimitsAndExpensesFrom(userId);
+                    viewModel = _configurationService.GetLimitsAndExpensesFrom(userId);
                 }
                 catch (Exception)
                 {

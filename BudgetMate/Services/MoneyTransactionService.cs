@@ -18,15 +18,15 @@ namespace BudgetMate.Services
         }
 
         //All transactions
-        public async Task<List<MoneyTransaction>> GetAllTransactionsFrom(int id)
+        public List<MoneyTransaction> GetAllTransactionsFrom(int id)
         {
-            var transactions = await _context.MoneyTransactions.Include(t => t.Category).Where(t => t.UserId == id).ToListAsync();
+            var transactions = _context.MoneyTransactions.Include(t => t.Category).Where(t => t.UserId == id).ToList();
             return transactions;
         }
 
-        public async Task<List<Category>> GetAllCategoriesFrom(int id)
+        public List<Category> GetAllCategoriesFrom(int id)
         {
-            var transactions = await GetAllTransactionsFrom(id);
+            var transactions = GetAllTransactionsFrom(id);
             var categories = new List<Category>();
             foreach (var transiction in transactions)
             {
@@ -38,10 +38,10 @@ namespace BudgetMate.Services
             return categories;
         }
 
-        public async Task<decimal> GetTotalIncomeFrom(int id)
+        public decimal GetTotalIncomeFrom(int id)
         {
             var incomeAmount = 0m;
-            List<MoneyTransaction> transactions = await GetAllTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetAllTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == true)
@@ -52,10 +52,10 @@ namespace BudgetMate.Services
             return incomeAmount;
         }
 
-        public async Task<decimal> GetTotalExpenseFrom(int id)
+        public decimal GetTotalExpenseFrom(int id)
         {
             var extenseAmount = 0m;
-            List<MoneyTransaction> transactions = await GetAllTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetAllTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == false)
@@ -67,9 +67,9 @@ namespace BudgetMate.Services
         }
 
         //Transactions from current Month
-        public async Task<List<MoneyTransaction>> GetActualMonthTransactionsFrom(int id)
+        public List<MoneyTransaction> GetActualMonthTransactionsFrom(int id)
         {
-            var transactions = await GetAllTransactionsFrom(id);
+            var transactions = GetAllTransactionsFrom(id);
             var filteredTransactions = new List<MoneyTransaction>();
             foreach (var transaction in transactions)
             {
@@ -82,10 +82,10 @@ namespace BudgetMate.Services
             }
             return filteredTransactions;
         }
-        public async Task<decimal> GetActualMonthIncomeFrom(int id)
+        public decimal GetActualMonthIncomeFrom(int id)
         {
             var incomeAmount = 0m;
-            List<MoneyTransaction> transactions = await GetActualMonthTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetActualMonthTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == true)
@@ -96,10 +96,10 @@ namespace BudgetMate.Services
             return incomeAmount;
         }
 
-        public async Task<decimal> GetActualMonthExpenseFrom(int id)
+        public decimal GetActualMonthExpenseFrom(int id)
         {
             var extenseAmount = 0m;
-            List<MoneyTransaction> transactions = await GetActualMonthTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetActualMonthTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == false)
@@ -111,9 +111,9 @@ namespace BudgetMate.Services
         }
 
         //Transactions from current Month
-        public async Task<List<MoneyTransaction>> GetActualWeekTransactionsFrom(int id)
+        public List<MoneyTransaction> GetActualWeekTransactionsFrom(int id)
         {
-            var transactions = await GetAllTransactionsFrom(id);
+            var transactions = GetAllTransactionsFrom(id);
             var today = DateOnly.FromDateTime(DateTime.Now);
             var weekStart = today.AddDays(-(int)today.DayOfWeek + (today.DayOfWeek == DayOfWeek.Sunday ? -6 : 1));
             var weekEnd = weekStart.AddDays(6);
@@ -128,10 +128,10 @@ namespace BudgetMate.Services
             }
             return filteredTransactions;
         }
-        public async Task<decimal> GetActualWeekIncomeFrom(int id)
+        public decimal GetActualWeekIncomeFrom(int id)
         {
             var incomeAmount = 0m;
-            List<MoneyTransaction> transactions = await GetActualWeekTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetActualWeekTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == true)
@@ -142,10 +142,10 @@ namespace BudgetMate.Services
             return incomeAmount;
         }
 
-        public async Task<decimal> GetActualWeekExpenseFrom(int id)
+        public decimal GetActualWeekExpenseFrom(int id)
         {
             var extenseAmount = 0m;
-            List<MoneyTransaction> transactions = await GetActualWeekTransactionsFrom(id);
+            List<MoneyTransaction> transactions = GetActualWeekTransactionsFrom(id);
             foreach (var transaction in transactions)
             {
                 if (transaction.IsIncome == false)
@@ -158,16 +158,16 @@ namespace BudgetMate.Services
 
         //Last transactions
 
-        public async Task<List<MoneyTransaction>> GetLastTransactions(int id, int count)
+        public List<MoneyTransaction> GetLastTransactions(int id, int count)
         {
-            var transactions = await GetAllTransactionsFrom(id);
+            var transactions = GetAllTransactionsFrom(id);
             var sortedTransactions = transactions.OrderByDescending(t => t.TransactionDate).ToList();
             var lastTransactions = sortedTransactions.Take(count).ToList();
             return lastTransactions;
         }
 
         //Filtering
-        public async Task<FilterViewModel> GetFilteredTransactions(string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected, string userId)
+        public FilterViewModel GetFilteredTransactions(string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected, string userId)
         {
             var viewModel = new FilterViewModel { };
             var filteredIncomes = new List<MoneyTransaction>();
@@ -192,7 +192,7 @@ namespace BudgetMate.Services
             {
                 throw new Exception();
             }
-            var transactions = await GetAllTransactionsFrom(id);
+            var transactions = GetAllTransactionsFrom(id);
             switch (searchingMethod)
             {
                 case "date":
@@ -253,8 +253,8 @@ namespace BudgetMate.Services
                     };
                     break;
             };
-            viewModel.actualCategories = await GetAllCategoriesFrom(id);
-            viewModel.allCategories = await _categoryService.GetAllCategories();
+            viewModel.actualCategories = GetAllCategoriesFrom(id);
+            viewModel.allCategories = _categoryService.GetAllCategories();
             viewModel.searchingMethod = searchingMethod;
             viewModel.incomeList = filteredIncomes;
             viewModel.expenseList = filteredExpenses;

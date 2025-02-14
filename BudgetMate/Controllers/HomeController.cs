@@ -15,7 +15,7 @@ namespace BudgetMate.Controllers
             _homeService = homeService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var viewModel = new TotalTransactionsViewModel();
             viewModel.lastMoneyTransactions = new List<MoneyTransaction>();
@@ -24,7 +24,7 @@ namespace BudgetMate.Controllers
             {
                 try
                 {
-                    viewModel = await _homeService.GetTotalTransactions(userId);
+                    viewModel = _homeService.GetTotalTransactions(userId);
                 }
                 catch (Exception)
                 {

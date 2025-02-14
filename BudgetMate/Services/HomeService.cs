@@ -7,13 +7,15 @@ namespace BudgetMate.Services
     {
         private readonly MoneyManagerContext _context;
         private readonly MoneyTransactionService _moneyTransactionService;
-        public HomeService(MoneyManagerContext context, MoneyTransactionService moneyTransactionService)
+        private readonly SavingLimitService _savingLimitService;
+        public HomeService(MoneyManagerContext context, MoneyTransactionService moneyTransactionService, SavingLimitService savingLimitService)
         {
             _context = context;
             _moneyTransactionService = moneyTransactionService;
+            _savingLimitService = savingLimitService;
         }
 
-        public async Task<TotalTransactionsViewModel> GetTotalTransactions(string userId)
+        public TotalTransactionsViewModel GetTotalTransactions(string userId)
         {
             var viewModel = new TotalTransactionsViewModel();
             if (userId == null)
@@ -36,13 +38,15 @@ namespace BudgetMate.Services
             }
             viewModel = new TotalTransactionsViewModel
             {
-                totalIncome = await _moneyTransactionService.GetTotalIncomeFrom(id),
-                totalExpense = await _moneyTransactionService.GetTotalExpenseFrom(id),
-                monthIncome = await _moneyTransactionService.GetActualMonthIncomeFrom(id),
-                monthExpense = await _moneyTransactionService.GetActualMonthExpenseFrom(id),
-                weekIncome = await _moneyTransactionService.GetActualWeekIncomeFrom(id),
-                weekExpense = await _moneyTransactionService.GetActualWeekExpenseFrom(id),
-                lastMoneyTransactions = await _moneyTransactionService.GetLastTransactions(id, 5) ?? new List<MoneyTransaction>(),
+                totalIncome =  _moneyTransactionService.GetTotalIncomeFrom(id),
+                totalExpense =  _moneyTransactionService.GetTotalExpenseFrom(id),
+                monthIncome =  _moneyTransactionService.GetActualMonthIncomeFrom(id),
+                monthExpense =  _moneyTransactionService.GetActualMonthExpenseFrom(id),
+                weekIncome =  _moneyTransactionService.GetActualWeekIncomeFrom(id),
+                weekExpense =  _moneyTransactionService.GetActualWeekExpenseFrom(id),
+                lastMoneyTransactions =  _moneyTransactionService.GetLastTransactions(id, 5) ?? new List<MoneyTransaction>(),
+                monthLimit = _savingLimitService.GetSavingLimitsFrom(id)[0]?.Amount,
+                weekLimit = _savingLimitService.GetSavingLimitsFrom(id)[1]?.Amount,
             };
             return viewModel;
         }

@@ -15,7 +15,7 @@ namespace BudgetMate.Services
             _moneyTransactionService = moneyTransactionService;
         }
 
-        public async Task<ConfigurationViewModel> GetLimitsAndExpensesFrom(string userId)
+        public ConfigurationViewModel GetLimitsAndExpensesFrom(string userId)
         {
             if (userId == null)
             {
@@ -35,8 +35,8 @@ namespace BudgetMate.Services
             {
                 monthSavingLimit = _savingLimitService.GetSavingLimitsFrom(id)[0],
                 weekSavingLimit = _savingLimitService.GetSavingLimitsFrom(id)[1],
-                monthExpense = await _moneyTransactionService.GetActualMonthExpenseFrom(id),
-                weekExpense = await _moneyTransactionService.GetActualWeekExpenseFrom(id),
+                monthExpense = _moneyTransactionService.GetActualMonthExpenseFrom(id),
+                weekExpense = _moneyTransactionService.GetActualWeekExpenseFrom(id),
             };
         }
 

@@ -11,9 +11,9 @@ namespace BudgetMate.Services
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public List<Category> GetAllCategories()
         {
-            var categories = await _context.Categories.ToListAsync();
+            var categories = _context.Categories.ToList();
             return categories;
         }
 

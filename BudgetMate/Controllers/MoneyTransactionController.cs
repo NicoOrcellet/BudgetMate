@@ -19,7 +19,7 @@ namespace BudgetMate.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int transictionId, string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
+        public IActionResult Index(int transictionId, string? searchingMethod, DateTime? startingDate, DateTime? endingDate, decimal? minAmount, decimal? maxAmount, string? categorySelected)
         {
             var viewModel = new FilterViewModel();
             string? userId = Request.Cookies["userId"];
@@ -27,7 +27,7 @@ namespace BudgetMate.Controllers
             {
                 try
                 {
-                    viewModel = await _transactionService.GetFilteredTransactions(searchingMethod, startingDate, endingDate, minAmount, maxAmount, categorySelected, userId);
+                    viewModel = _transactionService.GetFilteredTransactions(searchingMethod, startingDate, endingDate, minAmount, maxAmount, categorySelected, userId);
                 }
                 catch (Exception)
                 {

@@ -11,5 +11,7 @@ namespace BudgetMate.ViewModels
         public decimal? weekIncome { get; set; }
         public decimal? weekExpense { get; set; }
         public List<MoneyTransaction> lastMoneyTransactions { get; set; }
+        public decimal? monthLimit { get; set; }
+        public decimal? weekLimit { get; set; }
     }
 }
