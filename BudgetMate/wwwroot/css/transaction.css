@@ -1,0 +1,208 @@
+﻿body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-color: #D9D9D9;
+}
+
+.drop {
+    background-color: #BCBCBC;
+    margin-top: -10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.ModifyButton {
+    background: none;
+    border: 1px transparent;
+}
+
+details {
+    border-radius: 15px;
+    transition: height 0.3s ease-in-out;
+    box-shadow: #B0B0B0 5px 5px 5px;
+}
+
+    details[open] {
+        padding: 0px 25px 5px 25px;
+        height: auto;
+    }
+
+summary {
+    position: relative;
+    cursor: pointer;
+    list-style: none;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+    text-shadow: #9A9A9A 5px 5px 5px;
+}
+
+    summary::marker {
+        display: none;
+    }
+
+    summary::after {
+        content: "▼";
+        position: absolute;
+        right: 10px;
+        top: -5px;
+        font-size: 26px;
+    }
+
+details[open] summary {
+    margin-left: -15px;
+}
+
+    details[open] summary::after {
+        content: "▲";
+        right: -15px;
+    }
+
+table {
+    border-collapse: collapse;
+    margin: 15px 5px 5px 5px;
+}
+
+th:not(:last-child), td:not(:last-child) {
+    padding: 8px;
+    text-align: left;
+    color: black;
+}
+
+th:not(:last-child) {
+    font-size: 18px;
+    text-shadow: #c63408 2px 2px 2px;
+    background: linear-gradient(#ff8232, orangered);
+    border: 1px solid #c63408;
+}
+
+td:not(:last-child) {
+    background-color: white;
+    border: 1px solid #888888;
+    text-shadow: #B0B0B0 2px 2px 2px;
+    box-shadow: #9A9A9A 5px 5px 5px;
+}
+
+.dropdownButton {
+    background: none;
+    font-size: 24px;
+    padding: 0px;
+    margin-left: 10px;
+    color: orangered;
+    font-weight: bolder;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-shadow: #9A9A9A 5px 5px 5px;
+}
+
+.buttonClass {
+    background: linear-gradient(#ff8232, orangered);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 50px;
+    border: none;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    text-shadow: #c63408 2px 2px 2px;
+    transition: transform 0.3s ease, color 0.2s ease;
+}
+
+    .buttonClass:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+
+.createTransaction {
+    margin-top: 25px;
+}
+
+#filterForm p {
+    font-size: 24px;
+    text-shadow: #B0B0B0 5px 5px 5px;
+    margin-left: 0px;
+}
+
+#filterForm label {
+    font-size: 22px;
+    text-shadow: #B0B0B0 5px 5px 5px;
+}
+
+#searchingMethod {
+    font-size: 20px;
+    width: 100%;
+}
+
+#searchingMethod:hover{
+    cursor: pointer;
+}
+
+.filterInput {
+    border: 2px solid orangered;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    font-size: 20px;
+    width: 80%;
+    border-radius: 10px;
+}
+
+#categorySelected {
+    border: 2px solid orangered;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    border-radius: 10px;
+    margin-left: 12px;
+}
+
+.modalInput {
+    border: 2px solid orangered;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    font-size: 20px;
+    border-radius: 10px;
+    height: 40px;
+    display: flex;
+}
+
+#creationModal label{
+    margin-top: 10px;
+    font-size: 18px;
+    text-shadow: #B0B0B0 5px 5px 5px;
+    display: block;
+}
+
+.modalButton {
+    background: linear-gradient(#ff8232, orangered);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 25px 10px 25px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    text-shadow: #c63408 2px 2px 2px;
+    transition: transform 0.3s ease, color 0.2s ease;
+    margin-left: 20px;
+}
+
+    .modalButton:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+
+textarea {
+    resize: none;
+    min-height: 200px;
+    max-height: 200px;
+}
+
+addedDate {
+    cursor: pointer;
+}
+
+#addedDate::-webkit-calendar-picker-indicator {
+    display: none;
+}

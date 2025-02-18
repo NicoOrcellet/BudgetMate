@@ -256,8 +256,8 @@ namespace BudgetMate.Services
             viewModel.actualCategories = GetAllCategoriesFrom(id);
             viewModel.allCategories = _categoryService.GetAllCategories();
             viewModel.searchingMethod = searchingMethod;
-            viewModel.incomeList = filteredIncomes;
-            viewModel.expenseList = filteredExpenses;
+            viewModel.incomeList = filteredIncomes.OrderByDescending(t => t.TransactionDate).ToList();
+            viewModel.expenseList = filteredExpenses.OrderByDescending(t => t.TransactionDate).ToList();
             return viewModel;
         }
 

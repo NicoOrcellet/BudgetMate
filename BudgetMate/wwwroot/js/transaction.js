@@ -19,7 +19,7 @@ searchingMethod.addEventListener('change', (event) => {
         case 'amount':
             dateSelection.style.display = 'none'
             categorySelection.style.display = 'none'
-            amountSelection.style.display = 'block'
+            amountSelection.style.display = 'flex'
             break;
         case 'date':
             dateSelection.style.display = 'flex'
@@ -127,4 +127,8 @@ deleteForms.forEach((form) => {
             event.preventDefault()
         }
     })
+})
+
+document.getElementById("addedDate").addEventListener("click", () => {
+    document.getElementById("addedDate").showPicker();
 })

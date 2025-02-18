@@ -1,163 +1,157 @@
 ﻿@using BudgetMate.ViewModels
 @model FilterViewModel
 
-<style>
-    body{
-        background-color: #D9D9D9;
-    }
-
-    .drop{
-        background-color: #BCBCBC;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    .ModifyButton{
-        background:none;
-        border: 1px transparent;
-    }
-
-</style>
+<link rel="stylesheet" href="~/css/transaction.css">
 
 <div class="container px-4">
     <h1>Transacciones</h1>
     <div class="row">
         <div>
             <form asp-action="index" method="get" asp-controller="MoneyTransaction" id="filterForm">
-                <div class="d-flex w-100 justify-content-between">
-                    <p class="col-2">Buscar:</p>
-                    <div class="col-10">
+                <div class="row d-flex">
+                    <p class="col-1 d-flex align-self-center">Buscar:</p>
+                    <div class="col-11">
                         <Select id="searchingMethod" class="form-select" name="searchingMethod">
-                            @if (Model.searchingMethod == "amount")
-                            {
-                                <option disabled value="@Model.searchingMethod">Seleccionar filtro</option>
-                                <option value="amount" selected>Monto</option>
-                                <option value="date">Fechas</option>
-                                <option value="category">Categoría</option>
-                            }
-                            else if (Model.searchingMethod == "date")
-                            {
-                                <option value="amount">Monto</option>
-                                <option value="date" selected>Fechas</option>
-                                <option value="category">Categoría</option>
-                            }
-                            else if (Model.searchingMethod == "category")
-                            {
-                                <option value="amount">Monto</option>
-                                <option value="date">Fechas</option>
-                                <option value="category" selected>Categoría</option>
-                            }
-                            else
-                            {
-                                <option disabled selected value="none">Seleccionar filtro</option>
-                                <option value="amount">Monto</option>
-                                <option value="date">Fechas</option>
-                                <option value="category">Categoría</option>
-
+                            @{
+                                switch (Model.searchingMethod) 
+                                {
+                                    case "amount":
+                                        <option disabled value="none">Seleccionar filtro</option>
+                                        <option value="amount" selected>Monto</option>
+                                        <option value="date">Fecha</option>
+                                        <option value="category">Categoría</option>
+                                        break;
+                                    case "date":
+                                        <option disabled value="none">Seleccionar filtro</option>
+                                        <option value="amount">Monto</option>
+                                        <option value="date" selected>Fecha</option>
+                                        <option value="category">Categoría</option>
+                                        break;
+                                    case "category":
+                                        <option disabled value="none">Seleccionar filtro</option>
+                                        <option value="amount">Monto</option>
+                                        <option value="date">Fecha</option>
+                                        <option value="category" selected>Categoría</option>
+                                        break;
+                                    default:
+                                        <option disabled selected value="none">Seleccionar filtro</option>
+                                        <option value="amount">Monto</option>
+                                        <option value="date">Fecha</option>
+                                        <option value="category">Categoría</option>
+                                        break;
+                                }
                             }
                         </Select>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <div class="col-7 d-flex">
+                    <div class="col-6">
                         <div id="dateSelection" @(Model.searchingMethod == "date" ? "" : @Html.Raw("style=\"display: none\""))>
-                            <div class="m-1">
-                                <p>Desde:</p>
-                                <input type="date" id="startingDate" name="startingDate" value="@Model.startingDate">
-                            </div>
-                            <div class="m-1">
-                                <p>Hasta:</p>
-                                <input type="date" id="endingDate" name="endingDate" value="@Model.endingDate">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="startingDate">Desde:</label>
+                                    <input class="filterInput" type="date" id="startingDate" name="startingDate" value="@Model.startingDate">
+                                </div>
+                                <div class="col-6">
+                                    <label for="endingDate">Hasta:</label>
+                                    <input class="filterInput" type="date" id="endingDate" name="endingDate" value="@Model.endingDate">
+                                </div>
                             </div>
                         </div>
                         <div id="amountSelection" @(Model.searchingMethod == "amount" ? "" : @Html.Raw("style=\"display: none\""))>
-                            <div class="m-1">
-                                <p>Monto mínimo: </p>
-                                <input type="number" min="0" placeholder="..." id="minAmount" name="minAmount" value="@Model.minAmount">
-                            </div>
-                            <div class="m-1">
-                                <p>Monto máximo: </p>
-                                <input type="number" min="0" placeholder="..." id="maxAmount" name="maxAmount" value="@Model.maxAmount">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="minAmount">Monto mínimo: </label>
+                                    <input type="number" class="filterInput" min="0" id="minAmount" name="minAmount" value="@Model.minAmount">
+                                </div>
+                                <div class="col-6">
+                                    <label for="maxAmount">Monto máximo: </label>
+                                    <input type="number" class="filterInput" min="0" id="maxAmount" name="maxAmount" value="@Model.maxAmount">
+                                </div>
                             </div>
                         </div>
                         <div id="categorySelection" @(Model.searchingMethod == "category" ? "" : @Html.Raw("style=\"display: none\""))>
-                            <p>Seleccione la categoría</p>
-                            <select name="categorySelected" class="form-select">
-                                @if (Model.category != null)
-                                {
-                                    foreach (var category in Model.actualCategories)
+                            <div class="row">
+                                <label for="categorySelected">Seleccione la categoría</label>
+                                <select id="categorySelected" name="categorySelected" class="form-select w-75">
+                                    @if (Model.category != null)
                                     {
-                                        if (Model.category == category.CategoryName)
+                                        foreach (var category in Model.actualCategories)
                                         {
-                                            <option value="@category.CategoryName" selected>@category.CategoryName</option>
-                                        } else {
+                                            if (Model.category == category.CategoryName)
+                                            {
+                                                <option value="@category.CategoryName" selected>@category.CategoryName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@category.CategoryName">@category.CategoryName</option>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="" selected disabled></option>
+                                        foreach (var category in Model.actualCategories)
+                                        {
                                             <option value="@category.CategoryName">@category.CategoryName</option>
                                         }
                                     }
-                                } else {
-                                    <option value="" selected disabled></option>
-                                    foreach (var category in Model.actualCategories)
-                                    {
-                                        <option value="@category.CategoryName">@category.CategoryName</option>
-                                    }
-                                }
-                            </select>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-flex col-5 justify-content-between">
-                        <button id="clearFilters" class="col-4" type="button" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Limpiar</button>
-                        <button id="searchButton" class="col-7" type="submit" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Buscar</button>
+                    <div class="d-flex col-6 justify-content-evenly">
+                        <button id="clearFilters" class="col-5 buttonClass" type="button" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Limpiar</button>
+                        <button id="searchButton" class="col-5 buttonClass" type="submit" @(Model.searchingMethod != null ? "" : @Html.Raw("style=\"display: none\""))>Buscar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <button class="createTransaction" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Add">Añadir Transacción</button>
+    <button class="createTransaction buttonClass" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Add">Añadir Transacción</button>
     <details class="drop mt-5" open>
         <summary>Ingresos</summary>
         @{
             if(Model.incomeList.Count > 0)
             {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                            <th>Descripción</th>
-                            <th>Categoría</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.incomeList)
-                        {
-                            <tr data-transactionType="income" data-transactionId="@transaction.TransactionId">
-                                <td>@Html.DisplayFor(m => transaction.Amount)</td>
-                                <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
-                                <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
-                                <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
-                                <td>
-                                    <div class="dropdown dropend">
-                                        <button type="button" data-bs-toggle="dropdown">...</button>
-                                        <ul class="dropdown-menu">
-                                            <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
-                                            <li class="dropdown-item">
-                                                <form id="deleteTransactionForm" method="post" action="/MoneyTransaction/Delete">
-                                                    <input name="transactionId" type="hidden" value="@transaction.TransactionId"/>
-                                                    <button class="ModifyButton">Eliminar</button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
+                <div class="mx-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-1">Monto</th>
+                                <th class="col-1">Fecha</th>
+                                <th class="col-8">Descripción</th>
+                                <th class="col-2">Categoría</th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaction in Model.incomeList)
+                            {
+                                <tr data-transactionType="income" data-transactionId="@transaction.TransactionId">
+                                    <td>@Html.DisplayFor(m => transaction.Amount)</td>
+                                    <td>@Html.DisplayFor(m => transaction.TransactionDate)</td>
+                                    <td>@Html.DisplayFor(m => transaction.TransactionDescription)</td>
+                                    <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
+                                    <td>
+                                        <div class="dropdown dropend">
+                                            <button class="dropdownButton" type="button" data-bs-toggle="dropdown">+</button>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
+                                                <li class="dropdown-item">
+                                                    <form id="deleteTransactionForm" method="post" action="/MoneyTransaction/Delete">
+                                                        <input name="transactionId" type="hidden" value="@transaction.TransactionId" />
+                                                        <button class="ModifyButton">Eliminar</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
             else
             {
@@ -172,10 +166,11 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                            <th>Descripción</th>
-                            <th>Categoría</th>
+                            <th class="col-1">Monto</th>
+                            <th class="col-1">Fecha</th>
+                            <th class="col-8">Descripción</th>
+                            <th class="col-2">Categoría</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -188,7 +183,7 @@
                                 <td>@Html.DisplayFor(m => transaction.Category.CategoryName)</td>
                                 <td>
                                     <div class="dropdown dropend">
-                                        <button type="button" data-bs-toggle="dropdown">...</button>
+                                        <button class="dropdownButton" type="button" data-bs-toggle="dropdown">+</button>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><button class="ModifyButton" data-bs-toggle="modal" data-bs-target="#creationModal" data-operationType="Modify">Modificar</button></li>
                                             <li class="dropdown-item">
@@ -218,31 +213,47 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form id="transactionForm" action="/MoneyTransaction/Create" method="post">
-                    <p>Fecha:</p>
-                    <input id="addedDate" name="addedDate" type="date">
-                    <p>Tipo de transacción</p>
-                    <select id="transactionType" class="form-select" name="transactionType">
-                        <option value="income">Ingreso</option>
-                        <option value="expense">Gasto</option>
-                    </select>
-                    <p>Monto:</p>
-                    <input id="addedAmount" name="addedAmount" type="number" min="0">
-                    <p>Categoría:</p>
-                    <select id="CategoryId" name="CategoryId">
-                        <option selected disabled></option>
-                        @foreach (var category in Model.allCategories)
-                        {
-                            <option value="@category.CategoryId">@category.CategoryName</option>
-                        }
-                    </select>
-                    <p>Descripción (opcional):</p>
-                    <input id="TransactionDescription" name="TransactionDescription" class="w-75 h-25" type="text">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="addedDate">Fecha:</label>
+                            <input id="addedDate" name="addedDate" class="modalInput col-12" type="date">
+                        </div>
+                        <div class="col-6">
+                            <label for="transactionType">Tipo de transacción</label>
+                            <select id="transactionType" class="modalInput col-12" name="transactionType">
+                                <option value="income">Ingreso</option>
+                                <option value="expense">Gasto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="addedAmount">Monto:</label>
+                            <input id="addedAmount" name="addedAmount" type="number" class="modalInput col-12" min="0">
+                        </div>
+                        <div class="col-6">
+                            <label for="CategoryId">Categoría:</label>
+                            <select id="CategoryId" name="CategoryId" class="modalInput col-12">
+                                <option selected disabled></option>
+                                @foreach (var category in Model.allCategories)
+                                {
+                                    <option value="@category.CategoryId">@category.CategoryName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="TransactionDescription">Descripción (opcional):</label>
+                            <textarea id="TransactionDescription" name="TransactionDescription" class="modalInput col-12" type="text" maxlength="100" rows="6"></textarea>
+                        </div>
+                    </div>
                     <input type="hidden" name="transactionId" id="transactionId">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" data-bs-dismiss="modal" id="cancelAddTransaction">Cancelar</button>
-                <button type="button" id="addTransaction">Agregar</button>
+                <button type="button" class="modalButton" data-bs-dismiss="modal" id="cancelAddTransaction">Cancelar</button>
+                <button type="button" class="modalButton" id="addTransaction">Agregar</button>
             </div>
         </div>
     </div>
