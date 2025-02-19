@@ -1,0 +1,77 @@
+﻿body {
+    background-color: #D9D9D9;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.infoCard {
+    background-color: white;
+    border-radius: 25px;
+    padding: 15px;
+    box-shadow: #B0B0B0 -2px -2px 2px inset;
+    font-size: 20px;
+    text-shadow: #B0B0B0 5px 5px 5px;
+    margin-left: 0px;
+    height: 145px;
+}
+
+button {
+    background: linear-gradient(#ff8232, orangered);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 25px 10px 25px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    text-shadow: #c63408 2px 2px 2px;
+    transition: transform 0.3s ease, color 0.2s ease;
+}
+
+    button:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+
+.showLimit {
+    font-weight: bolder;
+    font-size: 25px;
+    margin-top: 0px;
+}
+
+label {
+    display: block;
+    font-size: 20px;
+    text-shadow: #B0B0B0 5px 5px 5px;
+}
+
+.modalInput {
+    border: 2px solid orangered;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    font-size: 20px;
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+input[readonly] {
+    background-color: #CCCCCC;
+    color: #252525;
+    border: 2px solid #252525;
+}
+
+.textLimit {
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.limitPeriod {
+    margin-bottom: 20px;
+    font-size: 20px;
+    border: 2px solid orangered;
+    box-shadow: #B0B0B0 5px 5px 5px;
+    border-radius: 10px;
+}

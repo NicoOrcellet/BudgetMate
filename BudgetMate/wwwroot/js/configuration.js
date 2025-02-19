@@ -1,6 +1,8 @@
 ﻿const monthDisplay = document.getElementById('monthLimitDisplay')
 const weekDisplay = document.getElementById('weekLimitDisplay')
-const limitPeriod = document.getElementById('limitPeriod')
+const limitPeriodSelects = document.querySelectorAll('.limitPeriod')
+const limitPeriodMonth = limitPeriodSelects[0]
+const limitPeriodWeek = limitPeriodSelects[1]
 const addLimitButton = document.getElementById('addLimitButton')
 const addLimitForm = document.getElementById('addLimitForm')
 const modalCallingButtons = document.querySelectorAll('[data-bs-toggle="modal"]')
@@ -20,22 +22,25 @@ deleteLimitForm.forEach((form) => {
 if (document.getElementById('savingLimit').getAttribute('data-recentPeriod') == 'week') {
     monthDisplay.style.display = 'none'
     weekDisplay.style.display = 'block'
-    limitPeriod.value = "week"
+    limitPeriodWeek.value = "week"
 } else {
     monthDisplay.style.display = 'block'
     weekDisplay.style.display = 'none'
-    limitPeriod.value = "month"
+    limitPeriodMonth.value = "month"
 }
 
-
-limitPeriod.addEventListener('change', (event) => {
-    if (event.target.value == 'month') {
-        monthDisplay.style.display = 'block'
-        weekDisplay.style.display = 'none'
-    } else {
-        monthDisplay.style.display = 'none'
-        weekDisplay.style.display = 'block'
-    }
+limitPeriodSelects.forEach((limitPeriod) => {
+    limitPeriod.addEventListener('change', (event) => {
+        if (event.target.value == 'month') {
+            monthDisplay.style.display = 'block'
+            weekDisplay.style.display = 'none'
+            limitPeriodMonth.value = "month"
+        } else {
+            monthDisplay.style.display = 'none'
+            weekDisplay.style.display = 'block'
+            limitPeriodWeek.value = "week"
+        }
+    })
 })
 
 modalCallingButtons.forEach(button => {

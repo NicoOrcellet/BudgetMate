@@ -1,73 +1,106 @@
 ﻿@using BudgetMate.ViewModels
 @model ConfigurationViewModel
 
-<style>
-    body{
-        background-color: #D9D9D9;
-    }
-
-    .infoCard{
-        background-color: white;
-    }
-</style>
+<link rel="stylesheet" href="~/css/configuration.css">
 
 <div>
     <h1>Configuración</h1>
-    <div id="savingLimit" class="infoCard" data-recentPeriod="@TempData["Period"]">
-        <div class="row">
-            <div id="monthLimitDisplay" class="col-8">
-                @{
-                    if (Model.monthSavingLimit == null){
-                        <p>Parece que no tienes un límite de ahorro mensual establecido</p>
-                        <p>¿Por qué no agregas uno?</p>
-                        <div>
-                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Mensual">Agregar Límite</button>
-                        </div>
-                    } else {
-                        <div>
-                            <p>Ahorro mensual establecido:</p>
-                            <p><span>@Model.monthExpense</span>/<span id="monthLimit">@Model.monthSavingLimit.Amount</span></p>
-                        </div>
-                        <div>
-                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Mensual" data-limitId="@Model.monthSavingLimit.SavingLimitId">Cambiar Límite</button>
-                            <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
-                                <input name="eraseLimitId" type="hidden" value="@Model.monthSavingLimit.SavingLimitId">
-                                <button>Eliminar Límite</button>
-                            </form>
-                        </div>
+    <div class="d-flex justify-content-center">
+        <div id="savingLimit" class="infoCard w-75" data-recentPeriod="@TempData["Period"]">
+            <div class="row">
+                <div id="monthLimitDisplay">
+                    @{
+                        if (Model.monthSavingLimit == null)
+                        {
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>Parece que no tienes un límite de ahorro mensual establecido</p>
+                                    <p>¿Por qué no agregas uno?</p>
+                                </div>
+                                <div class="col-6">
+                                    <select class="limitPeriod form-select-sm w-100">
+                                        <option value="month" select>Mensual</option>
+                                        <option value="week">Semanal</option>
+                                    </select>
+                                    <div class="d-flex justify-content-end">
+                                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Mensual">Agregar Límite</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="textLimit">Ahorro mensual establecido:</p>
+                                        <p class="showLimit"><span>@Model.monthExpense</span>/<span id="monthLimit">@Model.monthSavingLimit.Amount</span></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="limitPeriod form-select-sm w-100">
+                                            <option value="month" select>Mensual</option>
+                                            <option value="week">Semanal</option>
+                                        </select>
+                                        <div class="d-flex justify-content-between">
+                                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Mensual" data-limitId="@Model.monthSavingLimit.SavingLimitId">Cambiar Límite</button>
+                                            <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
+                                                <input name="eraseLimitId" type="hidden" value="@Model.monthSavingLimit.SavingLimitId">
+                                                <button>Eliminar Límite</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     }
-                }
+                </div>
+                <div id="weekLimitDisplay" style="display:none">
+                    @{
+                        if (Model.weekSavingLimit == null)
+                        {
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>Parece que no tienes un límite de ahorro semanal establecido</p>
+                                    <p>¿Por qué no agregas uno?</p>
+                                </div>
+                                <div class="col-6">
+                                    <select class="limitPeriod form-select-sm w-100">
+                                        <option value="month">Mensual</option>
+                                        <option value="week" select>Semanal</option>
+                                    </select>
+                                    <div class="d-flex justify-content-end">
+                                        <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Semanal">Agregar Límite</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <div class="row justify-content-center">
+                                    <div class="col-6">
+                                        <p class="textLimit">Ahorro semanal establecido:</p>
+                                        <p class="showLimit"><span>@Model.weekExpense</span>/<span id="weekLimit">@Model.weekSavingLimit.Amount</span></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="limitPeriod form-select-sm w-100">
+                                            <option value="month">Mensual</option>
+                                            <option value="week" select>Semanal</option>
+                                        </select>
+                                        <div class="d-flex justify-content-between">
+                                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Semanal" data-limitId="@Model.weekSavingLimit.SavingLimitId">Cambiar Límite</button>
+                                            <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
+                                                <input name="eraseLimitId" type="hidden" value="@Model.weekSavingLimit.SavingLimitId">
+                                                <button>Eliminar Límite</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
-            <div id="weekLimitDisplay" class="col-8" style="display:none">
-                @{
-                    if (Model.weekSavingLimit == null)
-                    {
-                        <p>Parece que no tienes un límite de ahorro semanal establecido</p>
-                        <p>¿Por qué no agregas uno?</p>
-                        <div>
-                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="add" data-period="Semanal">Agregar Límite</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div>
-                            <p>Ahorro semanal establecido:</p>
-                            <p><span>@Model.weekExpense</span>/<span id="weekLimit">@Model.weekSavingLimit.Amount</span></p>
-                        </div>
-                        <div>
-                            <button data-bs-toggle="modal" data-bs-target="#postLimit" data-actionType="change" data-period="Semanal" data-limitId="@Model.weekSavingLimit.SavingLimitId">Cambiar Límite</button>
-                            <form id="deleteLimitForm" action="/Configuration/Delete" method="post">
-                                <input name="eraseLimitId" type="hidden" value="@Model.weekSavingLimit.SavingLimitId">
-                                <button>Eliminar Límite</button>
-                            </form>
-                        </div>
-                    }
-                }
-            </div>
-            <select id="limitPeriod" class="form-select-sm w-25 col-4">
-                <option value="month" select>Mensual</option>
-                <option value="week">Semanal</option>
-            </select>
         </div>
     </div>
 
@@ -76,11 +109,17 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <form id="addLimitForm" method="post">
-                        <p>Periodo:</p>
-                        <input id="periodValue" name="periodValue" type="text" readonly>
-                        <p>Límite de ahorro:</p>
-                        <input id="limitAmount" name="limitAmount" type="number" min="0">
-                        <input id="limitId" name="limitId" type="hidden">
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="periodValue">Periodo:</label>
+                                <input id="periodValue" name="periodValue" class="modalInput" type="text" readonly>
+                            </div>
+                            <div class="col-5">
+                                <label for="limitAmount">Límite de ahorro:</label>
+                                <input id="limitAmount" name="limitAmount" class="modalInput" type="number" min="0">
+                            </div>
+                            <input id="limitId" name="limitId" type="hidden">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
