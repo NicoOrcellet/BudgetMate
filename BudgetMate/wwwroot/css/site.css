@@ -8,15 +8,87 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 10px;
+}
+
+#budgetMateLogo {
+    position: absolute;
+    left: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+img {
+    margin-right: 5px;
+}
+
+#budgetPart {
+    color: orangered;
+    text-shadow: black 5px 0px;
+    font-family: fantasy;
+    text-decoration: none;
+    font-size: 35px;
+    letter-spacing: 7px;
+    margin-top: 17px;
+}
+
+#matePart {
+    color: black;
+    text-shadow: orangered 5px 0px;
+    text-decoration: none;
+}
+
+nav {
+    background-color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    padding: 0;
+    position: relative;
+    box-shadow: rgba(0,0,0,0.25) 0px 8px 8px;
+}
+
+#ulNav {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+.liNav {
+    list-style: none;
+    height: 100%;
+}
+
+.navItem:link, .navItem:visited {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: orangered;
+    text-decoration: none;
+    width: 200px;
+    height: 100%;
+    text-shadow: #B0B0B0 2px 2px 2px;
+    transition: background-color 0.2s linear, color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.navItem:hover {
+    background-color: #ff8232;
+    color: white;
+    text-shadow: black 2px 2px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }

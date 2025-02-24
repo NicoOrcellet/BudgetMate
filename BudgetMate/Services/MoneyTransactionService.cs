@@ -285,6 +285,10 @@ namespace BudgetMate.Services
             model.TransactionDate = transactionDate;
             if (Decimal.TryParse(addedAmount, CultureInfo.InvariantCulture, out decimal amount))
             {
+                if (amount < 0 || amount > 999999999.99m)
+                {
+                    throw new ArgumentException("El monto ingresado no es valido");
+                }
                 model.Amount = amount;
                 model.UserId = id;
                 return model;

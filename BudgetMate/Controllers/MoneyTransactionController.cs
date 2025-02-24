@@ -34,6 +34,7 @@ namespace BudgetMate.Controllers
                     TempData["ErrorMessage"] = "Ocurrió un error inesperado";
                 }
             }
+            ViewData["Title"] = "Transacciones";
             return View(viewModel);
         }
 
@@ -75,10 +76,10 @@ namespace BudgetMate.Controllers
                 {
                     TempData["ErrorMessage"] = err.Message;
                 }
-                catch (Exception)
+                /*catch (Exception)
                 {
                     TempData["ErrorMessage"] = "Ocurrió un error inesperado";
-                }
+                }*/
             }
             return RedirectToAction("Index");
         }

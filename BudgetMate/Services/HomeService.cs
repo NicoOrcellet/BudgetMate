@@ -22,12 +22,12 @@ namespace BudgetMate.Services
             {
                 viewModel = new TotalTransactionsViewModel
                 {
-                    totalIncome = null,
-                    totalExpense = null,
-                    monthIncome = null,
-                    monthExpense = null,
-                    weekIncome = null,
-                    weekExpense = null,
+                    totalIncome = 0,
+                    totalExpense = 0,
+                    monthIncome = 0,
+                    monthExpense = 0,
+                    weekIncome = 0,
+                    weekExpense = 0,
                     lastMoneyTransactions = new List<MoneyTransaction>(),
                 };
                 return viewModel;

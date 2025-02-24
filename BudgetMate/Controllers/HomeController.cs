@@ -20,17 +20,8 @@ namespace BudgetMate.Controllers
             var viewModel = new TotalTransactionsViewModel();
             viewModel.lastMoneyTransactions = new List<MoneyTransaction>();
             string? userId = Request.Cookies["userId"];
-            if (!string.IsNullOrEmpty(userId))
-            {
-                try
-                {
-                    viewModel = _homeService.GetTotalTransactions(userId);
-                }
-                catch (Exception)
-                {
-                    TempData["ErrorMessage"] = "Ocurrió un error inesperado";
-                }
-            }
+            viewModel = _homeService.GetTotalTransactions(userId);
+            ViewData["Title"] = "Inicio";
             return View(viewModel);
         }
 

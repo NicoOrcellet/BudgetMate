@@ -27,6 +27,7 @@ namespace BudgetMate.Controllers
                     TempData["ErrorMessage"] = "Ocurrió un error inesperado";
                 }
             }
+            ViewData["Title"] = "Configuración";
             return View(viewModel);
         }
 

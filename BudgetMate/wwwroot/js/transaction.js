@@ -46,7 +46,7 @@ clearFilters.addEventListener('click', (event) => {
     filterForm.submit()
 })
 
-function validateFilledFilterInputs(event) {
+function validateFilterInputs(event) {
     switch (searchingMethod.value) {
         case 'date':
             if (document.getElementById('startingDate').value > document.getElementById('endingDate').value) {
@@ -61,6 +61,16 @@ function validateFilledFilterInputs(event) {
                 alert('El monto inicial ha de ser menor o igual que el final')
                 return false
             }
+            if (document.getElementById('minAmount').value > 999999999.99 || document.getElementById('maxAmount').value > 999999999.99) {
+                event.preventDefault()
+                alert('El monto ingresado no puede ser mayor que 999.999.999,99')
+                return false
+            }
+            if (document.getElementById('minAmount').value < 0 || document.getElementById('maxAmount').value < 0) {
+                event.preventDefault()
+                alert('El monto ingresado no puede ser mayor que 999.999.999,99')
+                return false
+            }
             return true
         default:
             return true
@@ -68,7 +78,7 @@ function validateFilledFilterInputs(event) {
 }
 
 filterForm.addEventListener('submit', function (event) {
-    if (validateFilledFilterInputs(event)) {
+    if (validateFilterInputs(event)) {
         filterForm.submit()
     } else {
         event.preventDefault()
@@ -87,8 +97,13 @@ function areRequiredInputsFilled() {
 
 addTransactionButton.addEventListener('click', (event) => {
     if (areRequiredInputsFilled()) {
-        addTransactionForm.submit()
-        bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
+        if (document.getElementById('addedAmount').value >= 0 && document.getElementById('addedAmount').value <= 999999999.99) {
+            addTransactionForm.submit()
+            bootstrap.Modal.getInstance(document.getElementById('creationModal')).hide()
+        } else {
+            event.preventDefault()
+            alert('El monto debe de ser menor a 1.000.000.000,00 y mayor o igual a 0')
+        }
     } else {
         event.preventDefault()
         alert('Falta información necesaria')

@@ -81,7 +81,12 @@ addLimitButton.addEventListener('click', (event) => {
         event.preventDefault()
         alert('Falta ingresar el monto')
     } else {
-        addLimitForm.submit()
-        $('addLimitForm').modal('hide')
+        if (limitAmount.value >= 0 && limitAmount.value <= 999999999.99) {
+            addLimitForm.submit()
+            $('addLimitForm').modal('hide')
+        } else {
+            event.preventDefault()
+            alert('El monto debe de ser menor a 1.000.000.000,00 y mayor o igual a 0')
+        }
     }
 })

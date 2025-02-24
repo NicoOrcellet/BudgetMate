@@ -62,11 +62,11 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label for="minAmount">Monto mínimo: </label>
-                                    <input type="number" class="filterInput" min="0" id="minAmount" name="minAmount" value="@Model.minAmount">
+                                    <input type="number" max="999999999.99" class="filterInput" min="0" id="minAmount" name="minAmount" value="@Model.minAmount">
                                 </div>
                                 <div class="col-6">
                                     <label for="maxAmount">Monto máximo: </label>
-                                    <input type="number" class="filterInput" min="0" id="maxAmount" name="maxAmount" value="@Model.maxAmount">
+                                    <input type="number" max="999999999.99" class="filterInput" min="0" id="maxAmount" name="maxAmount" value="@Model.maxAmount">
                                 </div>
                             </div>
                         </div>
@@ -229,7 +229,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="addedAmount">Monto:</label>
-                            <input id="addedAmount" name="addedAmount" type="number" class="modalInput col-12" min="0">
+                            <input id="addedAmount" name="addedAmount" type="number" class="modalInput col-12" min="0" max="999999999.99" step="0.01">
                         </div>
                         <div class="col-6">
                             <label for="CategoryId">Categoría:</label>

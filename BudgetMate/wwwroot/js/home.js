@@ -11,7 +11,7 @@ const savingLimitSelection = document.getElementById('savingLimitSelection')
 const progressBar = document.getElementById("progressBar")
 
 if (!localStorage.getItem("userId")) {
-    const userId = 1
+    const userId = Math.floor(1 + Math.random() * 9999999);
     localStorage.setItem("userId", userId)
 }
 
@@ -72,7 +72,7 @@ function updateProgressBar(period) {
             document.querySelector('.progress-container').style.display = 'block'
             setTimeout(() => {
                 const percentage = (document.getElementById("monthExpense").textContent.replace(',', '.') * 100) / document.getElementById("monthLimit").textContent.replace(',', '.')
-                checkPercentageProgress(percentage)
+                checkPercentageProgress(Math.ceil(percentage))
             }, 100)
         }
     } else {
@@ -84,7 +84,7 @@ function updateProgressBar(period) {
             progressBar.style.display = 'block'
             setTimeout(() => {
                 const percentage = (document.getElementById("weekExpense").textContent.replace(',', '.') * 100) / document.getElementById("weekLimit").textContent.replace(',', '.')
-                checkPercentageProgress(percentage)
+                checkPercentageProgress(Math.ceil(percentage))
             }, 100)
         }
     }  

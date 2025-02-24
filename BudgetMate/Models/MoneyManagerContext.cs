@@ -52,7 +52,7 @@ public partial class MoneyManagerContext : DbContext
             entity.ToTable("MoneyTransaction");
 
             entity.Property(e => e.TransactionId).HasColumnName("TransactionID");
-            entity.Property(e => e.Amount).HasColumnType("decimal(7, 2)");
+            entity.Property(e => e.Amount).HasColumnType("decimal(11, 2)");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.TransactionDate).HasDefaultValueSql("(CONVERT([date],getdate()))");
             entity.Property(e => e.TransactionDescription)
@@ -73,7 +73,7 @@ public partial class MoneyManagerContext : DbContext
             entity.ToTable("SavingLimit");
 
             entity.Property(e => e.SavingLimitId).HasColumnName("SavingLimitID");
-            entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Amount).HasColumnType("decimal(11, 2)");
             entity.Property(e => e.Period)
                 .HasMaxLength(1)
                 .IsUnicode(false)

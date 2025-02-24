@@ -30,6 +30,10 @@ namespace BudgetMate.Services
             }
             if (Decimal.TryParse(limitAmount, CultureInfo.InvariantCulture, out decimal amount))
             {
+                if (amount < 0 || amount > 999999999.99m)
+                {
+                    throw new ArgumentException("El monto ingresado no es valido");
+                }
                 var model = new SavingLimit
                 {
                     Amount = amount,
